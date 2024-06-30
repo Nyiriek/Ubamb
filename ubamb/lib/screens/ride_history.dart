@@ -17,166 +17,46 @@ class RideHistoryScreen extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 25),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                 Padding(padding: EdgeInsets.only(left: -0),
-                   child: IconButton(
-                     icon: const Icon(Icons.arrow_back,
-                         color: Colors.black, size: 34),
-                     onPressed: () {
-                       Navigator.pop(context);
-                     },
-                   ),
-                 ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back,
+                        color: Colors.black, size: 34),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  const SizedBox(width: 10),
+                  const Text(
+                    'Ride History',
+                    style: TextStyle(
+                      fontFamily: 'Roboto Regular',
+                      fontSize: 22,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height:30),
+              const SizedBox(height: 30),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                   Padding(padding: EdgeInsets.only(left: 30),
-                     child: Icon(Icons.location_on, color: Colors.black, size: 30),
-                   ),
-                  const SizedBox(width:10),
-                  Text('Aga Khan Hospital, Nairobi',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(width:15),
-                  Text('Kshs 200',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height:10),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(padding: EdgeInsets.only(left: 33),
-                    child:  Icon(Icons.zoom_in, color: Colors.black, size: 30),
-                  ),
-
-                  const SizedBox(width:10),
-                  Text('Aga Khan Hospital',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                  ),
-
-                ],
-              ),
-
-              const SizedBox(height: 10),
-              const Row(
-                children: [
-                 Padding(padding: EdgeInsets.only(left: 35),
-                   child: Text(
-                       'Jan 8, 2022 - 3:33',
-                       style: TextStyle(
-                         color: Color(0xFF444646),
-                         fontSize: 20,
-                       ),
-                   ),
-                 ),
-                ],
-              ),
-
-              const Divider(
-                color: Color(0xFFC5C5C5),
-                thickness: 2,
-              ),
-              const SizedBox(height:10),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(padding: EdgeInsets.only(left: 30),
-                    child: Icon(Icons.location_on, color: Colors.black, size: 30),
-                  ),
-                  const SizedBox(width:10),
-                  Text('Aga Khan Hospital, Nairobi',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(width:15),
-                  Text('Kshs 180',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height:10),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(padding: EdgeInsets.only(left: 33),
-                    child:  Icon(Icons.zoom_in, color: Colors.black, size: 30),
-                  ),
-
-                  const SizedBox(width:10),
-                  Text('Aga Khan Hospital',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                  ),
-
-                ],
-              ),
-
-              const SizedBox(height: 10),
-              const Row(
-                children: [
-                  Padding(padding: EdgeInsets.only(left: 35),
+                  Icon(Icons.location_on, color: Colors.black, size: 30),
+                  SizedBox(width: 10),
+                  Flexible(
                     child: Text(
-                      'Jan 30, 2022 - 2:33',
+                      'Aga Khan Hospital, Nairobi',
                       style: TextStyle(
-                        color: Color(0xFF444646),
-                        fontSize: 20,
+                        fontFamily: 'Roboto',
+                        fontSize: 15,
+                        color: Colors.black,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ],
-              ),
-
-              const Divider(
-                color: Color(0xFFC5C5C5),
-                thickness: 2,
-              ),
-              const SizedBox(height:10),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(padding: EdgeInsets.only(left: 30),
-                    child: Icon(Icons.location_on, color: Colors.black, size: 30),
-                  ),
-                  const SizedBox(width:10),
-                  Text('Aga Khan Hospital, Nairobi',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(width:15),
-                  Text('Kshs 220',
+                  SizedBox(width: 15),
+                  Text(
+                    'Kshs 200',
                     style: TextStyle(
                       fontFamily: 'Roboto',
                       fontSize: 20,
@@ -186,62 +66,61 @@ class RideHistoryScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height:10),
+              const SizedBox(height: 10),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 33),
-                    child:  Icon(Icons.zoom_in, color: Colors.black, size: 30),
-                  ),
-
-                  const SizedBox(width:10),
-                  Text('Aga Khan Hospital',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 15,
-                      color: Colors.black,
+                  Icon(Icons.zoom_in, color: Colors.black, size: 30),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      'Aga Khan Hospital',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-
                 ],
               ),
-
               const SizedBox(height: 10),
               const Row(
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 35),
-                    child: Text(
-                      'March 8, 2022 - 6:33',
-                      style: TextStyle(
-                        color: Color(0xFF444646),
-                        fontSize: 20,
-                      ),
+                  Text(
+                    'Jan 8, 2022 - 3:33',
+                    style: TextStyle(
+                      color: Color(0xFF444646),
+                      fontSize: 20,
                     ),
                   ),
                 ],
               ),
-
               const Divider(
                 color: Color(0xFFC5C5C5),
                 thickness: 2,
               ),
-              const SizedBox(height:10),
+              const SizedBox(height: 10),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 30),
-                    child: Icon(Icons.location_on, color: Colors.black, size: 30),
-                  ),
-                  const SizedBox(width:10),
-                  Text('Aga Khan Hospital, Nairobi',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 15,
-                      color: Colors.black,
+                  Icon(Icons.location_on, color: Colors.black, size: 30),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      'Aga Khan Hospital, Nairobi',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(width:15),
-                  Text('Kshs 250',
+                  SizedBox(width: 15),
+                  Text(
+                    'Kshs 180',
                     style: TextStyle(
                       fontFamily: 'Roboto',
                       fontSize: 20,
@@ -251,61 +130,187 @@ class RideHistoryScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height:10),
+              const SizedBox(height: 10),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 33),
-                    child:  Icon(Icons.zoom_in, color: Colors.black, size: 30),
-                  ),
-
-                  const SizedBox(width:10),
-                  Text('Aga Khan Hospital',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 15,
-                      color: Colors.black,
+                  Icon(Icons.zoom_in, color: Colors.black, size: 30),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      'Aga Khan Hospital',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-
                 ],
               ),
-
               const SizedBox(height: 10),
               const Row(
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 35),
-                    child: Text(
-                      'May 8, 2022 - 3:00',
-                      style: TextStyle(
-                        color: Color(0xFF444646),
-                        fontSize: 20,
-                      ),
+                  Text(
+                    'Jan 30, 2022 - 2:33',
+                    style: TextStyle(
+                      color: Color(0xFF444646),
+                      fontSize: 20,
                     ),
                   ),
                 ],
               ),
-
               const Divider(
                 color: Color(0xFFC5C5C5),
                 thickness: 2,
               ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 10),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.location_on, color: Colors.black, size: 30),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      'Aga Khan Hospital, Nairobi',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Text(
+                    'Kshs 220',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.zoom_in, color: Colors.black, size: 30),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      'Aga Khan Hospital',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                children: [
+                  Text(
+                    'March 8, 2022 - 6:33',
+                    style: TextStyle(
+                      color: Color(0xFF444646),
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(
+                color: Color(0xFFC5C5C5),
+                thickness: 2,
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.location_on, color: Colors.black, size: 30),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      'Aga Khan Hospital, Nairobi',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Text(
+                    'Kshs 250',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.zoom_in, color: Colors.black, size: 30),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      'Aga Khan Hospital',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                children: [
+                  Text(
+                    'May 8, 2022 - 3:00',
+                    style: TextStyle(
+                      color: Color(0xFF444646),
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(
+                color: Color(0xFFC5C5C5),
+                thickness: 2,
+              ),
+              const SizedBox(height: 65),
               const Divider(
                 color: Colors.grey,
                 thickness: 2,
               ),
-               Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Column(
                     children: [
                       IconButton(
-                        icon:  Icon(Icons.home, size: 31, color: Colors.black),
+                        icon: const Icon(Icons.home,
+                            size: 31, color: Colors.black),
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomeScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomeScreen()),
                           );
                         },
                       ),
@@ -315,22 +320,24 @@ class RideHistoryScreen extends StatelessWidget {
                   const Column(
                     children: [
                       Icon(Icons.history, size: 31),
-                      const SizedBox(height: 7),
+                      SizedBox(height: 7),
                       Text('History'),
                     ],
                   ),
                   Column(
                     children: [
                       IconButton(
-                        icon:  const Icon(Icons.account_circle, size: 31, color: Colors.black),
+                        icon: const Icon(Icons.account_circle,
+                            size: 31, color: Colors.black),
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const AccountScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => const AccountScreen()),
                           );
                         },
                       ),
-                      Text('Account'),
+                      const Text('Account'),
                     ],
                   ),
                 ],

@@ -20,7 +20,8 @@ class PickupLocationScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0),
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back,
                           color: Colors.black, size: 34),
@@ -31,72 +32,81 @@ class PickupLocationScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
               Image.asset(
                 'assets/images/img_5.png',
-                width: 620,
+                width: MediaQuery.of(context).size.width,
                 height: 300,
+                fit: BoxFit.cover,
               ),
-             const Padding(padding:  EdgeInsets.only(left: 90),
-               child: Text(
-                   'Choose your pick-up location',
-                 style:  TextStyle(
-                   color: Colors.black,
-                   fontSize: 20,
-                 ),
-               ),
-             ),
-              const SizedBox(height: 30),
-              Row(
-                children: [
-                  const SizedBox(width: 30),
-                  Text('Zimmerman Roysambu',
-                    style: TextStyle(
-                      color:  Color(0xFF1A1E1E),
-                      fontSize: 20
-                    ),
+              const Padding(
+                padding: EdgeInsets.only(left: 70, top: 16.0),
+                child: Text(
+                  'Choose your pick-up location',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
                   ),
-                  const SizedBox(width: 30),
-                  GestureDetector(
-                    onTap: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LocationDestinationScreen()),
-                    );
-                    },
-                    child: Container(
-                      width: 130,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color:  Color(0xFF0284FB),
-                        borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Zimmerman Roysambu',
+                        style: TextStyle(
+                          color: Color(0xFF1A1E1E),
+                          fontSize: 18,
+                        ),
                       ),
-                      child: const Center(
-                        child: Text(
-                          'Search',
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 25,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF1A1E1E),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LocationDestinationScreen()),
+                        );
+                      },
+                      child: Container(
+                        width: 107,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF0284FB),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Search',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF1A1E1E),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const SizedBox(height: 150),
+              const SizedBox(height: 75),
               Row(
                 children: [
                   const SizedBox(width: 30),
                   GestureDetector(
-                    onTap: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LocationDestinationScreen()),
-                    );
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LocationDestinationScreen()),
+                      );
                     },
                     child: Container(
-                      width: 350,
+                      width: MediaQuery.of(context).size.width - 60,
                       height: 48,
                       decoration: BoxDecoration(
                         color: Colors.black,
@@ -107,7 +117,7 @@ class PickupLocationScreen extends StatelessWidget {
                           'Confirm pick-up',
                           style: TextStyle(
                             fontFamily: 'Roboto',
-                            fontSize: 25,
+                            fontSize: 23,
                             fontWeight: FontWeight.w500,
                             color: Colors.white,
                           ),
@@ -117,7 +127,6 @@ class PickupLocationScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 50),
               const Divider(
                 color: Colors.black,
@@ -129,7 +138,7 @@ class PickupLocationScreen extends StatelessWidget {
                   Column(
                     children: [
                       IconButton(
-                        icon:  Icon(Icons.home, size: 31, color: Colors.black),
+                        icon: const Icon(Icons.home, size: 31, color: Colors.black),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -143,14 +152,14 @@ class PickupLocationScreen extends StatelessWidget {
                   const Column(
                     children: [
                       Icon(Icons.history, size: 31),
-                      const SizedBox(height: 7),
+                      SizedBox(height: 7),
                       Text('History'),
                     ],
                   ),
                   Column(
                     children: [
                       IconButton(
-                        icon:  const Icon(Icons.account_circle, size: 31, color: Colors.black),
+                        icon: const Icon(Icons.account_circle, size: 31, color: Colors.black),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -158,7 +167,7 @@ class PickupLocationScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      Text('Account'),
+                      const Text('Account'),
                     ],
                   ),
                 ],

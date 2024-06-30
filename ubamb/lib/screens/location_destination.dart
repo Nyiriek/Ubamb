@@ -22,7 +22,8 @@ class LocationDestinationScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0),
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back,
                           color: Colors.black, size: 34),
@@ -37,6 +38,7 @@ class LocationDestinationScreen extends StatelessWidget {
                 children: [
                   const SizedBox(width: 30),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         width: 334,
@@ -45,9 +47,7 @@ class LocationDestinationScreen extends StatelessWidget {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(7),
                         ),
-
                         child: const Padding(
-
                           padding: EdgeInsets.only(left: 30),
                           child: Align(
                             alignment: Alignment.centerLeft,
@@ -73,7 +73,7 @@ class LocationDestinationScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(7),
                         ),
                         child: const Padding(
-                          padding:EdgeInsets.only(left: 30),
+                          padding: EdgeInsets.only(left: 30),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: TextField(
@@ -92,29 +92,36 @@ class LocationDestinationScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(width: 10),
-                  Image.asset(
-                    'assets/images/img_3.png',
-                    width: 30,
-                    height: 30,
+                  Expanded(
+                    child: Image.asset(
+                      'assets/images/img_3.png',
+                      width: 30,
+                      height: 30,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-              Image.asset(
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 400,
+                child: Image.asset(
                   'assets/images/img_6.png',
-                 width: 400,
-                  height: 400,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
                 ),
-
-              const SizedBox(height: 50),
+              ),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   const SizedBox(width: 70),
                   GestureDetector(
-                    onTap: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const TripScreen()),
-                    );
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TripScreen()),
+                      );
                     },
                     child: Container(
                       width: 250,
@@ -149,11 +156,13 @@ class LocationDestinationScreen extends StatelessWidget {
                   Column(
                     children: [
                       IconButton(
-                        icon:  Icon(Icons.home, size: 31, color: Colors.black),
+                        icon: const Icon(Icons.home,
+                            size: 31, color: Colors.black),
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomeScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomeScreen()),
                           );
                         },
                       ),
@@ -163,18 +172,20 @@ class LocationDestinationScreen extends StatelessWidget {
                   const Column(
                     children: [
                       Icon(Icons.history, size: 31),
-                      const SizedBox(height: 7),
+                      SizedBox(height: 7),
                       Text('History'),
                     ],
                   ),
                   Column(
                     children: [
                       IconButton(
-                        icon:  const Icon(Icons.account_circle, size: 31, color: Colors.black),
+                        icon: const Icon(Icons.account_circle,
+                            size: 31, color: Colors.black),
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const AccountScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => const AccountScreen()),
                           );
                         },
                       ),

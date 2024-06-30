@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ubamb/screens/book_ride_screen.dart';
 
 class RatingScreen extends StatefulWidget {
   const RatingScreen({super.key});
@@ -89,27 +90,45 @@ class _RatingScreenState extends State<RatingScreen> {
                       style: TextStyle(color: Colors.black54),
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        minimumSize: const Size(double.infinity, 50),
+                    GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const BookRideScreen()),
+                      );
+                    },
+                    child: Container(
+                      width: 324,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                      onPressed: () {
-                        // Handle submit
-                      },
-                      child: const Text('Submit'),
+                      child: const Center(
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(
+                            fontFamily: 'Roboto Medium',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
+                  ),
                   ],
                 ),
               ),
             ),
-            BottomNavigationBar(
-              items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-                BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
-                BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
-              ],
-            ),
+            // BottomNavigationBar(
+            //   items: const [
+            //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            //     BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
+            //     BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
+            //   ],
+            // ),
           ],
         ),
       ),

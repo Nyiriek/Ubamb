@@ -4,7 +4,6 @@ import 'package:ubamb/screens/pickup_location.dart';
 import 'home_screen.dart';
 import 'account_screen.dart';
 
-
 class BookRideScreen extends StatelessWidget {
   const BookRideScreen({super.key});
 
@@ -22,7 +21,8 @@ class BookRideScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0),
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back,
                           color: Colors.black, size: 34),
@@ -34,90 +34,96 @@ class BookRideScreen extends StatelessWidget {
                 ],
               ),
               Container(
-                width: 420,
+                width: MediaQuery.of(context).size.width,
                 height: 300,
                 child: Image.asset(
                   'assets/images/img_4.png',
-                  width: 200,
-                  height: 300,
+                  fit: BoxFit.cover,
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/img_1.png',
+                          width: 100,
+                          height: 100,
+                        ),
+                        const SizedBox(width: 15),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Taxi',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Text('16.30 - 3 min away'),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        const Text(
+                          '1,200 ksh',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/img.png',
+                          width: 100,
+                          height: 100,
+                        ),
+                        const SizedBox(width: 15),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Ambulance',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Text('16.00 - 10 min away'),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        const Text(
+                          '3,000 ksh',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/img_1.png',
-                    width: 100,
-                    height: 100,
-                  ),
-                  const SizedBox(width: 15),
-                  const Column(
-                    children: [
-                      Text(
-                        'Taxi',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                        ),
-                      ),
-
-                      Text(
-                        '16.30 - 3 min away'
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 45),
-                  const Text(
-                      '1,200 ksh',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25,
-                    )
-                  ),
-                ],
               ),
+              const SizedBox(height: 75),
               Row(
                 children: [
-                  Image.asset(
-                    'assets/images/img.png',
-                    width: 100,
-                    height: 100,
-                  ),
-                  const SizedBox(width: 15),
-                  const Column(
-                    children: [
-                      Text(
-                        'Ambulance',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                        ),
-                      ),
-
-                      Text(
-                          '16.00 - 10 min away'
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 45),
-                  const Text(
-                      '3, 000 ksh',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                      )
-                  ),
-                ],
-              ),
-              const SizedBox(height: 140),
-              Row(
-                children: [
-                  const SizedBox(width: 90),
+                  const SizedBox(width: 70),
                   GestureDetector(
-                    onTap: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const PickupLocationScreen()),
-                    );
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const PickupLocationScreen()),
+                      );
                     },
                     child: Container(
                       width: 200,
@@ -139,7 +145,6 @@ class BookRideScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(width: 20),
                   Container(
                     width: 70,
@@ -149,11 +154,9 @@ class BookRideScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(7),
                     ),
                     child: const Center(
-                      child: Icon(Icons.local_taxi_outlined)
+                      child: Icon(Icons.local_taxi_outlined),
                     ),
                   ),
-
-
                 ],
               ),
               const Divider(
@@ -166,7 +169,7 @@ class BookRideScreen extends StatelessWidget {
                   Column(
                     children: [
                       IconButton(
-                        icon:  Icon(Icons.home, size: 31, color: Colors.black),
+                        icon: const Icon(Icons.home, size: 31, color: Colors.black),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -180,14 +183,14 @@ class BookRideScreen extends StatelessWidget {
                   const Column(
                     children: [
                       Icon(Icons.history, size: 31),
-                      const SizedBox(height: 7),
+                      SizedBox(height: 7),
                       Text('History'),
                     ],
                   ),
                   Column(
                     children: [
                       IconButton(
-                        icon:  const Icon(Icons.account_circle, size: 31, color: Colors.black),
+                        icon: const Icon(Icons.account_circle, size: 31, color: Colors.black),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -195,7 +198,7 @@ class BookRideScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      Text('Account'),
+                      const Text('Account'),
                     ],
                   ),
                 ],
