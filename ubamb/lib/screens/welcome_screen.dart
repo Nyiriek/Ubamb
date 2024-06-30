@@ -22,6 +22,7 @@ class UBAMB extends StatefulWidget {
   const UBAMB({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _UBAMBState createState() => _UBAMBState();
 }
 
@@ -116,9 +117,9 @@ class _UBAMBState extends State<UBAMB> {
                                   children: <Widget>[
                                     Image.asset(
                                       country['flag']!,
-                                      height: 24,
+                                      height: 30,
                                     ),
-                                    const SizedBox(width: 5),
+                                    const SizedBox(width: 6),
                                     Text(
                                       country['code']!,
                                       style: const TextStyle(
@@ -141,7 +142,8 @@ class _UBAMBState extends State<UBAMB> {
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: Column(
+                        child: Stack(
+                          clipBehavior: Clip.none,
                           children: [
                             Container(
                               height: 40,
@@ -167,23 +169,28 @@ class _UBAMBState extends State<UBAMB> {
                                     keyboardType: TextInputType.phone,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Field is required';
+                                        setState(() {
+                                          _showError = true;
+                                        });
+                                        return null; // Do not return a message
+                                      } else {
+                                        setState(() {
+                                          _showError = false;
+                                        });
+                                        return null; // Clear the message if any
                                       }
-                                      return null;
                                     },
                                   ),
                                 ),
                               ),
                             ),
                             if (_showError)
-                              const Padding(
-                                padding: EdgeInsets.only(top: 5.0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Field is required',
-                                    style: TextStyle(color: Colors.red, fontSize: 12),
-                                  ),
+                              const Positioned(
+                                top: 41,
+                                left: 5,
+                                child: Text(
+                                  'Field is required and must be 9 digits',
+                                  style: TextStyle(color: Color.fromARGB(255, 179, 13, 1), fontSize: 12),
                                 ),
                               ),
                           ],
@@ -191,7 +198,7 @@ class _UBAMBState extends State<UBAMB> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 25),
                   Container(
                     width: 320,
                     height: 38,
@@ -201,15 +208,11 @@ class _UBAMBState extends State<UBAMB> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate() && !_showError) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                            MaterialPageRoute(builder: (context) => SignUpScreen()),
                           );
-                        } else {
-                          setState(() {
-                            _showError = true;
-                          });
                         }
                       },
                       child: const Text(

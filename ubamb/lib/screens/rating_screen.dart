@@ -4,6 +4,7 @@ class RatingScreen extends StatefulWidget {
   const RatingScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _RatingScreenState createState() => _RatingScreenState();
 }
 

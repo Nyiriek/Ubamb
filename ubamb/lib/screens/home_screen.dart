@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Roboto',
                 fontSize: 16,
-                color: Color.fromARGB(255, 125, 125, 125),
+                color: Color.fromARGB(255, 92, 92, 92),
               ),
             ),
             const SizedBox(height: 10),
@@ -81,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             const Text(
               'Here for you :)',
               style: TextStyle(
@@ -90,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 35),
             Container(
               width: 269,
               height: 48,
@@ -112,7 +112,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const Spacer(),
             const Divider(color: Colors.black, thickness: 1),
-            const SizedBox(height: 10),
+            const SizedBox(height: 2),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -178,7 +178,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 3),
           ],
         ),
       ),
