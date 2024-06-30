@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ubamb/screens/rating_screen.dart';
 
 
 
@@ -138,6 +139,10 @@ class ArrivedScreen extends StatelessWidget {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const RatingScreen()),
+                          );
                           // Add your arrived functionality here
                         },
                         style: ElevatedButton.styleFrom(
