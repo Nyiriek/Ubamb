@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: TripScreen(),
-    );
-  }
-}
-
-class TripScreen extends StatelessWidget {
-  const TripScreen({super.key});
+class ArrivedScreen extends StatelessWidget {
+  const ArrivedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +11,12 @@ class TripScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: const Icon(
-          Icons.arrow_back,
-          color: Colors.black,
+        leading:  IconButton(
+          icon: const Icon(Icons.arrow_back,
+              color: Colors.black, size: 34),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: Column(
@@ -47,7 +37,13 @@ class TripScreen extends StatelessWidget {
             flex: 3,
             child: Container(
               width: double.infinity,
-              color: Colors.blue,
+              decoration: BoxDecoration(
+                color: Color(0xFF4CA6F8),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -63,9 +59,9 @@ class TripScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Divider(
-                      color: Colors.grey,
-                      thickness: 1,
+                    const  Divider(
+                      color: Colors.white,
+                      thickness: 5,
                     ),
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,6 +152,7 @@ class TripScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ),

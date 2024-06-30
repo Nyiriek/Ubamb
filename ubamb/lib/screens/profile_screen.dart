@@ -1,29 +1,21 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ProfileScreen(),
-    );
-  }
-}
-
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:  const Color(0xFF4CA6F8),
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        leading: const Icon(Icons.arrow_back),
+
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back,
+              color: Colors.black, size: 34),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: const Text('Ella'),
         centerTitle: true,
         actions: const [

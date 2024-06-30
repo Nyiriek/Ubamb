@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ubamb/screens/arrived_screen.dart';
 import 'package:ubamb/screens/pickup_location.dart';
+import 'package:ubamb/screens/starttrip_screen.dart';
 import 'home_screen.dart';
 import 'account_screen.dart';
 
@@ -100,7 +102,7 @@ class LocationDestinationScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Image.asset(
                   'assets/images/img_6.png',
-                  width: 620,
+                 width: 400,
                   height: 400,
                 ),
 
@@ -111,7 +113,7 @@ class LocationDestinationScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const LocationDestinationScreen()),
+                      MaterialPageRoute(builder: (context) => const TripScreen()),
                     );
                     },
                     child: Container(

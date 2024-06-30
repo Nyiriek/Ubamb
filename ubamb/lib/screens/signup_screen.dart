@@ -48,6 +48,7 @@ class SignUpScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+
                     Container(
                       width: 148,
                       height: 45,

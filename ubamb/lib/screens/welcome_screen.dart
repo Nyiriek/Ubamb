@@ -200,7 +200,7 @@ class _UBAMBState extends State<UBAMB> {
                   ),
                   const SizedBox(height: 25),
                   Container(
-                    width: 320,
+                    width: 370,
                     height: 38,
                     decoration: BoxDecoration(
                       color: Colors.black,
@@ -240,7 +240,7 @@ class _UBAMBState extends State<UBAMB> {
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    width: 320,
+                    width:  370,
                     height: 50,
                     decoration: BoxDecoration(
                       color: Colors.black,

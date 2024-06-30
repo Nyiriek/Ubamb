@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ubamb/screens/book_ride_screen.dart';
+import 'package:ubamb/screens/ride_history.dart';
 import 'account_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -149,6 +150,10 @@ class HomeScreen extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.history, size: 31, color: Colors.black),
                       onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const RideHistoryScreen()),
+                        );
                         // Implement history functionality here
                       },
                     ),

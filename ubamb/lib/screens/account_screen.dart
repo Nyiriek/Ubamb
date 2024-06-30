@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ubamb/main.dart';
+import 'package:ubamb/screens/home_screen.dart';
+import 'package:ubamb/screens/profile_screen.dart';
+import 'package:ubamb/screens/ride_history.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -122,12 +126,22 @@ class AccountScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Column(
+
+
                 children: [
-                  buildMenuItem(
-                    context,
-                    icon: Icons.person,
-                    text: 'Personal Details',
+                  GestureDetector(
+                    onTap: () {Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                    );
+                    },
+                    child:  buildMenuItem(
+                      context,
+                      icon: Icons.person,
+                      text: 'Personal Details',
+                    ),
                   ),
+
                   buildMenuItem(
                     context,
                     icon: Icons.settings,
@@ -141,48 +155,73 @@ class AccountScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 90),
-              Center(
-                child: Container(
-                  width: 261,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Signout',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: () {Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyApp()),
+                );
+                },
+                child:  Center(
+                  child: Container(
+                    width: 261,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Signout',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
+
+
               const SizedBox(height: 30),
               const Divider(
                 color: Colors.black,
                 thickness: 1,
               ),
               const SizedBox(height: 25),
-              const Row(
+               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Column(
                     children: [
-                      Icon(Icons.home, size: 31),
-                      Text('Home'),
+                      IconButton(
+                        icon: const Icon(Icons.home, size: 31, color: Colors.black),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomeScreen()),
+                          );
+                        },
+                      ),
+                      const Text('Home'),
                     ],
                   ),
                   Column(
                     children: [
-                      Icon(Icons.history, size: 31),
-                      Text('History'),
+                      IconButton(
+                        icon: const Icon(Icons.history, size: 31, color:Colors.black),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const  RideHistoryScreen()),
+                          );
+                        },
+                      ),
+                      const Text('History'),
                     ],
                   ),
-                  Column(
+                  const  Column(
                     children: [
                       Icon(Icons.account_circle, size: 31),
                       Text('Account'),
