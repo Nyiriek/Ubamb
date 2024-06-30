@@ -41,8 +41,8 @@ class LocationDestinationScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 334,
-                        height: 46,
+                        width: 307,
+                        height: 40,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(7),
@@ -66,8 +66,8 @@ class LocationDestinationScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
                       Container(
-                        width: 334,
-                        height: 46,
+                        width: 307,
+                        height: 40,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(7),
@@ -91,12 +91,11 @@ class LocationDestinationScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(width: 10),
                   Expanded(
                     child: Image.asset(
                       'assets/images/img_3.png',
-                      width: 30,
-                      height: 30,
+                      width: 35,
+                      height: 35,
                     ),
                   ),
                 ],
@@ -145,7 +144,7 @@ class LocationDestinationScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               const Divider(
                 color: Colors.grey,
                 thickness: 2,

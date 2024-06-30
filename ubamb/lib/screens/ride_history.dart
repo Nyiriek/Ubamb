@@ -37,7 +37,7 @@ class RideHistoryScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 26),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
