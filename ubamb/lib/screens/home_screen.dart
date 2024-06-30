@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ubamb/screens/book_ride_screen.dart';
 import 'account_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -91,25 +92,33 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 35),
-            Container(
-              width: 269,
-              height: 48,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child: const Center(
-                child: Text(
-                  'Book a ride with us',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+            GestureDetector(
+              onTap: () {Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const BookRideScreen()),
+              );
+              },
+              child:Container(
+                width: 269,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Book a ride with us',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 25,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
+
             const Spacer(),
             const Divider(color: Colors.black, thickness: 1),
             const SizedBox(height: 2),
