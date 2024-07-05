@@ -30,8 +30,9 @@ class _RatingScreenState extends State<RatingScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Rating', style: TextStyle(color: Colors.black)),
+        title:  Text('Rating', style: TextStyle(color: Colors.black)),
         elevation: 0,
+        centerTitle: true ,
       ),
       body: Container(
         color: Colors.blue,
@@ -43,22 +44,40 @@ class _RatingScreenState extends State<RatingScreen> {
                   children: [
                     const SizedBox(height: 20),
                     Container(
+                      height: 150,
+                      width: 300,
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Row(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(5, (index) {
-                          return Icon(
-                            index < _rating ? Icons.star : Icons.star_border,
-                            size: 40,
+
+                        children: [
+                          Text('Good',
+                          style: TextStyle(
                             color: Colors.black,
-                          );
-                        }),
+                            fontSize: 20,
+                          )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(5, (index) {
+                              return Icon(
+                                index < _rating ? Icons.star : Icons.star_border,
+                                size: 40,
+                                color: Colors.black,
+                              );
+                            },
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    const Divider(
+                      color: Color(0xFFC5C5C5),
+                      thickness: 2,
                     ),
                     const SizedBox(height: 20),
                     const Text(
@@ -69,27 +88,66 @@ class _RatingScreenState extends State<RatingScreen> {
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
-                      children: List.generate(_issues.length, (index) {
-                        return FilterChip(
-                          label: Text(_issues[index]),
-                          selected: _selectedIssues[index],
-                          onSelected: (bool selected) {
-                            setState(() {
-                              _selectedIssues[index] = selected;
-                            });
-                          },
-                          backgroundColor: Colors.blue[300],
-                          selectedColor: Colors.blue[500],
-                          labelStyle: const TextStyle(color: Colors.black),
-                        );
-                      }),
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(width: 50),
+                            Column(
+                              children: List.generate(_issues.length ~/ 2, (index) {
+                                final issueIndex = index * 2 ;
+                                if (issueIndex >= _issues.length) {
+                                  return const SizedBox.shrink();
+                                }
+                                return FilterChip(
+                                  label: Text(_issues[issueIndex]),
+                                  selected: _selectedIssues[issueIndex],
+                                  onSelected: (bool selected) {
+                                    setState(() {
+                                      _selectedIssues[issueIndex] = selected;
+                                    });
+                                  },
+                                  backgroundColor: Colors.blue[300],
+                                  selectedColor: Colors.blue[500],
+                                  labelStyle: const TextStyle(color: Colors.black),
+                                );
+                              }),
+                            ),
+                            SizedBox(width: 30),
+                            Column(
+                              children: List.generate(_issues.length ~/ 2, (index) {
+                                final issueIndex = index * 2 + 1;
+                                if (issueIndex >= _issues.length) {
+                                  return const SizedBox.shrink();
+                                }
+                                return SizedBox(
+                                  height: 40,
+                                  width: 180,// Set the desired height for all FilterChips
+                                  child: FilterChip(
+                                    label: Text(_issues[issueIndex]),
+                                    selected: _selectedIssues[issueIndex],
+                                    onSelected: (bool selected) {
+                                      setState(() {
+                                        _selectedIssues[issueIndex] = selected;
+                                      });
+                                    },
+                                    backgroundColor: Colors.blue[300],
+                                    selectedColor: Colors.blue[500],
+                                    labelStyle: const TextStyle(color: Colors.black),
+                                  ),
+                                );
+                              }),
+                            ),
+
+                          ],
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     const Text(
                       'Please Select one or more issues.',
-                      style: TextStyle(color: Colors.black54),
+                      style: TextStyle(color: Colors.black54, fontSize: 20,),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 100),
                     GestureDetector(
                     onTap: () {
                       Navigator.push(

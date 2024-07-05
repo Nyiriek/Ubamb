@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ubamb/screens/payment_screen.dart';
 import 'package:ubamb/screens/rating_screen.dart';
 
 
@@ -141,7 +142,7 @@ class ArrivedScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const RatingScreen()),
+                            MaterialPageRoute(builder: (context) => const PaymentScreen()),
                           );
                           // Add your arrived functionality here
                         },

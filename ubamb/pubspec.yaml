@@ -87,6 +87,15 @@ flutter:
     - assets/images/img_6.png
     - assets/images/map1.jpg
     - assets/images/map2.jpg
+    -  assets/images/img_9.png
+    -  assets/images/img_8.png
+    -  assets/images/img_10.png
+    -  assets/images/img_11.png
+    -  assets/images/img_12.png
+    -  assets/images/img_13.png
+    -  assets/images/img_14.png
+    - assets/images/img_15.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

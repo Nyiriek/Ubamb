@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ubamb/screens/arrived_screen.dart';
+import 'package:ubamb/screens/ongoing_screen.dart';
 
 class TripScreen extends StatelessWidget {
   const TripScreen({super.key});
@@ -140,7 +141,7 @@ class TripScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const ArrivedScreen()),
+                            MaterialPageRoute(builder: (context) => const OngoingScreen()),
                           );
                           // Add your start trip functionality here
                         },
