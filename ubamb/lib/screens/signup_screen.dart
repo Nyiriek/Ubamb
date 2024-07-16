@@ -46,7 +46,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
 
                     Container(

@@ -3,6 +3,7 @@ import 'package:ubamb/main.dart';
 import 'package:ubamb/screens/home_screen.dart';
 import 'package:ubamb/screens/profile_screen.dart';
 import 'package:ubamb/screens/ride_history.dart';
+import 'package:ubamb/screens/settings_privacy.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -141,17 +142,34 @@ class AccountScreen extends StatelessWidget {
                       text: 'Personal Details',
                     ),
                   ),
+                  GestureDetector(
+                    onTap: () {Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SettingsPrivacyScreen()),
+                    );
+                    },
+                    child:buildMenuItem(
+                      context,
+                      icon: Icons.settings,
+                      text: 'Settings and privacy',
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const RideHistoryScreen()),
+                    );
+                    },
+                    child: buildMenuItem(
+                      context,
+                      icon: Icons.history,
+                      text: 'Trip details',
+                    ),
+                  ),
 
-                  buildMenuItem(
-                    context,
-                    icon: Icons.settings,
-                    text: 'Settings and privacy',
-                  ),
-                  buildMenuItem(
-                    context,
-                    icon: Icons.history,
-                    text: 'Trip details',
-                  ),
+
+
+
                 ],
               ),
               const SizedBox(height: 90),
