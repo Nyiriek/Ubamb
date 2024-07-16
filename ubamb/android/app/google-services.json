@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "983194841792",
+    "project_id": "ubamb-98363",
+    "storage_bucket": "ubamb-98363.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983194841792:android:7ecd98a97d6a7caf2f7325",
+        "android_client_info": {
+          "package_name": "com.example.ubamb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC-Vqf1uWwI6t57xo00OnzBf6LcqxsQ2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
