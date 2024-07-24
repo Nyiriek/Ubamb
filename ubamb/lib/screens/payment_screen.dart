@@ -231,7 +231,7 @@ class PaymentScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(width: 210),
+                            const SizedBox(width: 200),
                             Image.asset(
                               'assets/images/img_3.png',
                               width: 24,
@@ -257,7 +257,7 @@ class PaymentScreen extends StatelessWidget {
 
                               ),
                             ),
-                            const SizedBox(width: 185),
+                            const SizedBox(width: 175),
                             Image.asset(
                               'assets/images/img_12.png',
                               width: 24,
@@ -282,7 +282,7 @@ class PaymentScreen extends StatelessWidget {
 
                               ),
                             ),
-                            const SizedBox(width: 110),
+                            const SizedBox(width: 100),
                             Image.asset(
                               'assets/images/img_12.png',
                               width: 24,

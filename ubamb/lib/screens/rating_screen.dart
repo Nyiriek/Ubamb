@@ -11,14 +11,23 @@ class RatingScreen extends StatefulWidget {
 
 class _RatingScreenState extends State<RatingScreen> {
   final int _rating = 4;
-  final List<String> _issues = [
-    'Poor Route',
-    'Too many Pickups',
-    'Co-rider behavior',
-    'Navigation',
-    'Driving',
-    'Other'
-  ];
+  bool _isSelected = false;
+  bool _issSelected = false;
+  bool _isssSelected = false;
+  bool _issssSelected = false;
+  bool _isssssSelected = false;
+  bool _issssssSelected = false;
+
+
+
+  // final List<String> _issues = [
+  //   'Poor Route',
+  //   'Too many Pickups',
+  //   'Co-rider behavior',
+  //   'Navigation',
+  //   'Driving',
+  //   'Other'
+  // ];
   final List<bool> _selectedIssues = List.generate(6, (_) => false);
 
   @override
@@ -85,62 +94,165 @@ class _RatingScreenState extends State<RatingScreen> {
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                     const SizedBox(height: 20),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: [
+                    Container(
+
+                      child:
                         Row(
                           children: [
-                            const SizedBox(width: 50),
+                            const SizedBox(width: 15),
                             Column(
-                              children: List.generate(_issues.length ~/ 2, (index) {
-                                final issueIndex = index * 2 ;
-                                if (issueIndex >= _issues.length) {
-                                  return const SizedBox.shrink();
-                                }
-                                return FilterChip(
-                                  label: Text(_issues[issueIndex]),
-                                  selected: _selectedIssues[issueIndex],
-                                  onSelected: (bool selected) {
-                                    setState(() {
-                                      _selectedIssues[issueIndex] = selected;
-                                    });
-                                  },
-                                  backgroundColor: Colors.blue[300],
-                                  selectedColor: Colors.blue[500],
-                                  labelStyle: const TextStyle(color: Colors.black),
-                                );
-                              }),
-                            ),
-                            const SizedBox(width: 30),
-                            Column(
-                              children: List.generate(_issues.length ~/ 2, (index) {
-                                final issueIndex = index * 2 + 1;
-                                if (issueIndex >= _issues.length) {
-                                  return const SizedBox.shrink();
-                                }
-                                return SizedBox(
-                                  height: 40,
-                                  width: 180,// Set the desired height for all FilterChips
-                                  child: FilterChip(
-                                    label: Text(_issues[issueIndex]),
-                                    selected: _selectedIssues[issueIndex],
+                              children: [
+                                Container(
+                                  child:  FilterChip(
+                                    label: Text('Poor Route'),
+                                    selected: _isSelected,
                                     onSelected: (bool selected) {
                                       setState(() {
-                                        _selectedIssues[issueIndex] = selected;
+                                        _isSelected = selected;
                                       });
                                     },
                                     backgroundColor: Colors.blue[300],
                                     selectedColor: Colors.blue[500],
-                                    labelStyle: const TextStyle(color: Colors.black),
+                                    labelStyle: TextStyle(color: Colors.black, fontSize: 16), // Adjust font size
+                                    labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
+                                      side: BorderSide(
+                                        color: Colors.blue,
+
+                                      ),
+
+                                    ),// Adjust padding
                                   ),
-                                );
-                              }),
+                                ),
+                                Container(
+                                  child:  FilterChip(
+                                    label: Text('Too many Pickups'),
+                                    selected: _isssSelected,
+                                    onSelected: (bool selected) {
+                                      setState(() {
+                                        _isssSelected = selected;
+                                      });
+                                    },
+                                    backgroundColor: Colors.blue[300],
+                                    selectedColor: Colors.blue[500],
+                                    labelStyle: TextStyle(color: Colors.black, fontSize: 13), // Adjust font size
+                                    labelPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
+                                      side: BorderSide(
+                                        color: Colors.blue,
+
+                                      ),
+
+                                    ),// Adjust padding
+                                  ),
+                                ),
+                                Container(
+                                  child:  FilterChip(
+                                    label: Text('Co-rider behavior'),
+                                    selected: _issSelected,
+                                    onSelected: (bool selected) {
+                                      setState(() {
+                                        _issSelected = selected;
+                                      });
+                                    },
+                                    backgroundColor: Colors.blue[300],
+                                    selectedColor: Colors.blue[500],
+                                    labelStyle: TextStyle(color: Colors.black, fontSize: 13), // Adjust font size
+                                    labelPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
+                                      side: BorderSide(
+                                        color: Colors.blue,
+
+                                      ),
+
+                                    ),// Adjust padding
+                                  ),
+                                ),
+                              ]
+                            ),
+
+
+                            const SizedBox(width: 30),
+                            Column(
+                              children: [
+                                Container(
+                                  child:  FilterChip(
+                                    label: Text('Navigation'),
+                                    selected: _issssSelected,
+                                    onSelected: (bool selected) {
+                                      setState(() {
+                                        _issssSelected = selected;
+                                      });
+                                    },
+                                    backgroundColor: Colors.blue[300],
+                                    selectedColor: Colors.blue[500],
+                                    labelStyle: TextStyle(color: Colors.black, fontSize: 16), // Adjust font size
+                                    labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
+                                      side: BorderSide(
+                                        color: Colors.blue,
+
+                                      ),
+
+                                    ),// Adjust padding
+                                  ),
+                                ),
+                                Container(
+                                  child:  FilterChip(
+                                    label: Text('Driving'),
+                                    selected: _isssssSelected,
+                                    onSelected: (bool selected) {
+                                      setState(() {
+                                        _isssssSelected = selected;
+                                      });
+                                    },
+                                    backgroundColor: Colors.blue[300],
+                                    selectedColor: Colors.blue[500],
+                                    labelStyle: TextStyle(color: Colors.black, fontSize: 13), // Adjust font size
+                                    labelPadding: EdgeInsets.symmetric(horizontal: 34, vertical: 8),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
+                                      side: BorderSide(
+                                        color: Colors.blue,
+
+                                      ),
+
+                                    ),// Adjust padding
+                                  ),
+                                ),
+                                Container(
+                                  child:  FilterChip(
+                                    label: Text('Other'),
+                                    selected: _issssssSelected,
+                                    onSelected: (bool selected) {
+                                      setState(() {
+                                        _issssssSelected = selected;
+                                      });
+                                    },
+                                    backgroundColor: Colors.blue[500],
+                                    selectedColor: Colors.blue[500],
+                                    labelStyle: TextStyle(color: Colors.black, fontSize: 13), // Adjust font size
+                                    labelPadding: EdgeInsets.symmetric(horizontal: 38, vertical: 4),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
+                                      side: BorderSide(
+                                          color: Colors.blue,
+
+                                      ),
+
+                                  ),
+                                ),
+                                ),
+                              ],
                             ),
 
                           ],
                         ),
-                      ],
+
                     ),
                     const SizedBox(height: 10),
                     const Text(
@@ -180,16 +292,13 @@ class _RatingScreenState extends State<RatingScreen> {
                 ),
               ),
             ),
-            // BottomNavigationBar(
-            //   items: const [
-            //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            //     BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
-            //     BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
-            //   ],
-            // ),
+
           ],
         ),
       ),
     );
+
   }
+
 }
+
