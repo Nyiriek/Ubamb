@@ -38,8 +38,8 @@ class ProfileScreen extends StatelessWidget {
             Container(
               child: Row(
                 children: [
-                  SizedBox(width: 50),
-                  CircleAvatar(
+                  const SizedBox(width: 50),
+                  const CircleAvatar(
                     radius: 30.0, // Adjust the radius as needed
                     backgroundColor:
                         Colors.grey, // Set the background color of the circle
@@ -49,11 +49,11 @@ class ProfileScreen extends StatelessWidget {
                       color: Color(0xFF4CA6F8), // Set the color of the icon
                     ),
                   ),
-                  SizedBox(width: 15),
+                  const SizedBox(width: 15),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Ella',
                         style: TextStyle(
                           fontSize: 24.0,
@@ -61,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(height: 4.0),
+                      const SizedBox(height: 4.0),
                       Container(
                         width: 151,
                         height: 24,
@@ -69,7 +69,7 @@ class ProfileScreen extends StatelessWidget {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Text(
+                        child: const Text(
                           'ellapeter@gmail.com',
                           style: TextStyle(
                             color: Colors.grey,
@@ -107,7 +107,7 @@ class ProfileScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  const Divider(
+                  Divider(
                     color: Colors.white,
                     thickness: 2,
                   ),
@@ -136,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 16.0),
-                  const Divider(
+                  Divider(
                     color: Colors.white,
                     thickness: 2,
                   ),
@@ -155,7 +155,7 @@ class ProfileScreen extends StatelessWidget {
                   Text('- Number of Deliveries (Para): 1'),
                   Text('- Type of Pregnancy: Single'),
                   SizedBox(height: 16.0),
-                  const Divider(
+                  Divider(
                     color: Colors.white,
                     thickness: 2,
                   ),
@@ -174,7 +174,7 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 70),
+            const SizedBox(height: 70),
             const Divider(
               color: Colors.grey,
               thickness: 2,
@@ -217,7 +217,7 @@ class ProfileScreen extends StatelessWidget {
                 Column(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.account_circle,
+                      icon: const Icon(Icons.account_circle,
                           size: 31, color: Colors.black),
                       onPressed: () {
                         Navigator.push(
@@ -227,7 +227,7 @@ class ProfileScreen extends StatelessWidget {
                         );
                       },
                     ),
-                    Text('Account'),
+                    const Text('Account'),
                   ],
                 ),
               ],

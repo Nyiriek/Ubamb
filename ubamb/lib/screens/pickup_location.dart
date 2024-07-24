@@ -53,7 +53,7 @@ class PickupLocationScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: Text(
                         'Zimmerman Roysambu',
                         style: TextStyle(
@@ -74,7 +74,7 @@ class PickupLocationScreen extends StatelessWidget {
                         width: 107,
                         height: 52,
                         decoration: BoxDecoration(
-                          color: Color(0xFF0284FB),
+                          color: const Color(0xFF0284FB),
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: const Center(

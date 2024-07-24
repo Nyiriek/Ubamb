@@ -21,19 +21,19 @@ class SettingsPrivacyScreen extends StatelessWidget {
 
                 children: [
                   IconButton(
-                    icon:  Icon(Icons.arrow_back,
+                    icon:  const Icon(Icons.arrow_back,
                         color: Colors.black, size: 35),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
-                  Padding(padding: EdgeInsets.only(left: 30),
+                  const Padding(padding: EdgeInsets.only(left: 30),
                   child: Text('Settings and Privacy', style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-              Padding(padding: EdgeInsets.only(left: 40),
+              Padding(padding: const EdgeInsets.only(left: 40),
               child: Row(
                 children: [
                   Stack(
@@ -63,7 +63,7 @@ class SettingsPrivacyScreen extends StatelessWidget {
                             ),
 
 
-                            child: Icon(Icons.edit, color: Colors.black, size: 30)
+                            child: const Icon(Icons.edit, color: Colors.black, size: 30)
                         ),
                       ),
 
@@ -104,12 +104,12 @@ class SettingsPrivacyScreen extends StatelessWidget {
                 ],
               ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  Row(
+                  const Row(
                     children: [
                       SizedBox(width: 10),
                       Text("Edit personal details", style: TextStyle(color: Colors.black, fontSize: 25, decoration: TextDecoration.underline, fontWeight: FontWeight.bold ),),
@@ -118,16 +118,16 @@ class SettingsPrivacyScreen extends StatelessWidget {
                     ],
                   ),
 
-                  Padding(padding: EdgeInsets.only(left: 25),
+                  Padding(padding: const EdgeInsets.only(left: 25),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Full Name:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      SizedBox(height: 2),
+                      const Text("Full Name:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      const SizedBox(height: 2),
                       Container(
                         width: 307,
                         height: 40,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
 
                         ),
@@ -148,13 +148,13 @@ class SettingsPrivacyScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text("Date of birth:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 10),
+                      const Text("Date of birth:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      const SizedBox(height: 2),
                       Container(
                         width: 307,
                         height: 40,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
 
                         ),
@@ -175,13 +175,13 @@ class SettingsPrivacyScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text("Contact:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 10),
+                      const Text("Contact:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      const SizedBox(height: 2),
                       Container(
                         width: 307,
                         height: 40,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
 
                         ),
@@ -202,13 +202,13 @@ class SettingsPrivacyScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text("Address:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 10),
+                      const Text("Address:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      const SizedBox(height: 2),
                       Container(
                         width: 307,
                         height: 40,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
 
                         ),
@@ -229,8 +229,8 @@ class SettingsPrivacyScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Row(
+                      const SizedBox(height: 20),
+                      const Row(
                         children: [
                           Text("Edit transportation preferences", style: TextStyle(color: Colors.black, fontSize: 25, decoration: TextDecoration.underline , fontWeight: FontWeight.bold),),
                           SizedBox(width: 5),
@@ -238,13 +238,13 @@ class SettingsPrivacyScreen extends StatelessWidget {
 
                         ],
                       ),
-                      SizedBox(height: 10),
-                      Text("Preferred Hospital or Birthing Center:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 10),
+                      const Text("Preferred Hospital or Birthing Center:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      const SizedBox(height: 2),
                       Container(
                         width: 307,
                         height: 40,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
 
                         ),
@@ -265,13 +265,13 @@ class SettingsPrivacyScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text("Preferred Mode of Transport:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 10),
+                      const Text("Preferred Mode of Transport:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      const SizedBox(height: 2),
                       Container(
                         width: 307,
                         height: 40,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
 
                         ),
@@ -292,13 +292,13 @@ class SettingsPrivacyScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text("Special Transportation Needs:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 10),
+                      const Text("Special Transportation Needs:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      const SizedBox(height: 2),
                       Container(
                         width: 307,
                         height: 40,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
 
                         ),
@@ -367,7 +367,7 @@ class SettingsPrivacyScreen extends StatelessWidget {
                    Column(
                     children: [
                       IconButton(
-                        icon:  Icon(Icons.account_circle, size: 31, color: Colors.black),
+                        icon:  const Icon(Icons.account_circle, size: 31, color: Colors.black),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -376,7 +376,7 @@ class SettingsPrivacyScreen extends StatelessWidget {
                         },
                       ),
 
-                      Text('Account'),
+                      const Text('Account'),
                     ],
                   ),
                 ],

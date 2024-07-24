@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ubamb/screens/signup_screen.dart';
+import 'package:url_launcher/url_launcher.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +23,6 @@ class UBAMB extends StatefulWidget {
   const UBAMB({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _UBAMBState createState() => _UBAMBState();
 }
 
@@ -172,12 +172,12 @@ class _UBAMBState extends State<UBAMB> {
                                         setState(() {
                                           _showError = true;
                                         });
-                                        return null; // Do not return a message
+                                        return null;
                                       } else {
                                         setState(() {
                                           _showError = false;
                                         });
-                                        return null; // Clear the message if any
+                                        return null; 
                                       }
                                     },
                                   ),
@@ -240,22 +240,32 @@ class _UBAMBState extends State<UBAMB> {
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    width:  370,
+                    width: 370,
                     height: 50,
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(7),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'EMERGENCY CALL',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.none,
+                    child: TextButton(
+                      onPressed: () async {
+                        const emergencyNumber = 'tel:211'; 
+                        if (await canLaunch(emergencyNumber)) {
+                          await launch(emergencyNumber);
+                        } else {
+                          throw 'Could not launch $emergencyNumber';
+                        }
+                      },
+                      child: const Center(
+                        child: Text(
+                          'EMERGENCY CALL',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.none,
+                          ),
+                          textDirection: TextDirection.ltr,
                         ),
-                        textDirection: TextDirection.ltr,
                       ),
                     ),
                   ),

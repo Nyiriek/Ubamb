@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ubamb/screens/location_destination.dart';
 import 'package:ubamb/screens/pickup_location.dart';
 import 'home_screen.dart';
 import 'account_screen.dart';
@@ -33,7 +32,7 @@ class BookRideScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 300,
                 child: Image.asset(

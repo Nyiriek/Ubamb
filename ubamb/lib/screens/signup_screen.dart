@@ -1,11 +1,40 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
 import 'code_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
-  SignUpScreen({Key? key});
+  SignUpScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _signUp(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        UserCredential userCredential =
+            await _auth.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+        if (userCredential.user != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +77,6 @@ class SignUpScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-
                     Container(
                       width: 148,
                       height: 45,
@@ -111,7 +139,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 25), 
+                const SizedBox(height: 25),
                 Container(
                   width: 334,
                   height: 46,
@@ -124,6 +152,7 @@ class SignUpScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: TextFormField(
+                        controller: _emailController,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Email eg example@gmail.com',
@@ -145,7 +174,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 25), 
+                const SizedBox(height: 25),
                 Container(
                   width: 334,
                   height: 46,
@@ -158,6 +187,7 @@ class SignUpScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: TextFormField(
+                        controller: _passwordController,
                         obscureText: true,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -180,7 +210,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 25), 
+                const SizedBox(height: 25),
                 Container(
                   width: 334,
                   height: 46,
@@ -193,6 +223,7 @@ class SignUpScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: TextFormField(
+                        controller: _confirmPasswordController,
                         obscureText: true,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -206,7 +237,9 @@ class SignUpScreen extends StatelessWidget {
                           if (value == null || value.isEmpty) {
                             return 'Please confirm your password';
                           }
-                          // Add password confirmation validation logic here
+                          if (value != _passwordController.text) {
+                            return 'Passwords do not match';
+                          }
                           return null;
                         },
                       ),
@@ -214,25 +247,19 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 25),
-                GestureDetector(
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
-                    }
-                  },
-                  child: Container(
-                    width: 334,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
+                TextButton(
+                  onPressed: () => _signUp(context),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(7),
                     ),
-                    child: const Center(
+                  ),
+                  child: const SizedBox(
+                    width: 334,
+                    height: 48,
+                    child: Center(
                       child: Text(
                         'Register',
                         style: TextStyle(
@@ -291,7 +318,8 @@ class SignUpScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CodeScreen(phoneNumber: '+250791701052'),
+                        builder: (context) =>
+                            const CodeScreen(phoneNumber: '+250791701052'),
                       ),
                     );
                   },

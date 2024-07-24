@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ubamb/screens/payment_screen.dart';
-import 'package:ubamb/screens/rating_screen.dart';
 
 
 
@@ -39,7 +38,7 @@ class ArrivedScreen extends StatelessWidget {
             flex: 3,
             child: Container(
               width: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(0xFF4CA6F8),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),

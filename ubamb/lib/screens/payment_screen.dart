@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:ubamb/screens/profile_screen.dart';
 import 'package:ubamb/screens/rating_screen.dart';
 
 
@@ -31,8 +30,8 @@ class PaymentScreen extends StatelessWidget {
 
                 ],
               ),
-              SizedBox(height: 10, width: 30),
-             Padding(padding: EdgeInsets.only(left: 30),
+              const SizedBox(height: 10, width: 30),
+             const Padding(padding: EdgeInsets.only(left: 30),
              child:  Text(
                'Wallet',
                style: TextStyle(
@@ -42,8 +41,8 @@ class PaymentScreen extends StatelessWidget {
                ),
              ),
              ),
-             SizedBox(height: 10),
-              Padding(padding: EdgeInsets.only(left: 10),
+             const SizedBox(height: 10),
+              Padding(padding: const EdgeInsets.only(left: 10),
               child: Container(
                 width: 370,
                 height: 94,
@@ -95,7 +94,7 @@ class PaymentScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 20),
-             Padding(padding: EdgeInsets.only(left: 10),
+             const Padding(padding: EdgeInsets.only(left: 10),
              child:  Text(
                'Topup your cash', style: TextStyle(
                color: Colors.black,
@@ -129,7 +128,7 @@ class PaymentScreen extends StatelessWidget {
                         height: 24,
                       ),
                       const SizedBox(width: 20),
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(width: 20),
@@ -171,7 +170,7 @@ class PaymentScreen extends StatelessWidget {
                         height: 24,
                       ),
                       const SizedBox(width: 20),
-                     Text(
+                     const Text(
                        'Google Pay',
                        style: TextStyle(
                          fontSize: 16,
@@ -190,13 +189,13 @@ class PaymentScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 30),
-             Divider(
+             const Divider(
                 color: Colors.white,
                 thickness: 2,
 
               ),
               const SizedBox(height: 10),
-              Padding(padding: EdgeInsets.only(left: 20),
+              const Padding(padding: EdgeInsets.only(left: 20),
 
               child: Text(
                 'Add manual payments',
@@ -208,7 +207,7 @@ class PaymentScreen extends StatelessWidget {
               ),
               ),
               const SizedBox(height: 10),
-              Padding(padding: EdgeInsets.only(left: 10),
+              Padding(padding: const EdgeInsets.only(left: 10),
                 child: Container(
                   width: 370,
                   height: 180,
@@ -217,14 +216,14 @@ class PaymentScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(15.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            SizedBox(width: 10),
-                            Text(
+                            const SizedBox(width: 10),
+                            const Text(
                               'Add new',
                               style: TextStyle(
                                 color: Colors.black,
@@ -232,7 +231,7 @@ class PaymentScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(width: 210),
+                            const SizedBox(width: 210),
                             Image.asset(
                               'assets/images/img_3.png',
                               width: 24,
@@ -243,14 +242,14 @@ class PaymentScreen extends StatelessWidget {
 
                         Row(
                           children: [
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Image.asset(
                               'assets/images/img_10.png',
                               width: 35,
                               height: 35,
                             ),
-                            SizedBox(width: 10),
-                            Text(
+                            const SizedBox(width: 10),
+                            const Text(
                               'PayPal',
                               style: TextStyle(
                                 color:Color(0xFF776F6F),
@@ -258,7 +257,7 @@ class PaymentScreen extends StatelessWidget {
 
                               ),
                             ),
-                            SizedBox(width: 185),
+                            const SizedBox(width: 185),
                             Image.asset(
                               'assets/images/img_12.png',
                               width: 24,
@@ -268,14 +267,14 @@ class PaymentScreen extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Image.asset(
                               'assets/images/img_13.png',
                               width: 80,
                               height: 50,
                             ),
-                            SizedBox(width: 10),
-                            Text(
+                            const SizedBox(width: 10),
+                            const Text(
                               'MomoPay',
                               style: TextStyle(
                                 color:Color(0xFF776F6F),
@@ -283,7 +282,7 @@ class PaymentScreen extends StatelessWidget {
 
                               ),
                             ),
-                            SizedBox(width: 110),
+                            const SizedBox(width: 110),
                             Image.asset(
                               'assets/images/img_12.png',
                               width: 24,

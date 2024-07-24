@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ubamb/screens/arrived_screen.dart';
 import 'package:ubamb/screens/ongoing_screen.dart';
 
 class TripScreen extends StatelessWidget {
@@ -38,7 +37,7 @@ class TripScreen extends StatelessWidget {
             child: Container(
               width: double.infinity,
               height: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(0xFF4CA6F8),
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),

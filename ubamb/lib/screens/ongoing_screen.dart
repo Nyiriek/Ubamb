@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ubamb/screens/arrived_screen.dart';
-import 'package:ubamb/screens/pickup_location.dart';
-import 'package:ubamb/screens/starttrip_screen.dart';
-import 'home_screen.dart';
-import 'account_screen.dart';
 
 class OngoingScreen extends StatelessWidget {
   const OngoingScreen({super.key});
@@ -33,14 +29,14 @@ class OngoingScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 55),
-                  Text('Your ride has started ',
+                  const Text('Your ride has started ',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 19,
                   ),),
                 ],
               ),
-              Padding(padding: EdgeInsets.only(left: 140, top: 30),
+              const Padding(padding: EdgeInsets.only(left: 140, top: 30),
               child: Text('Ongoing trip ',
                 style: TextStyle(
                   color: Color(0xFF01AD1F),
@@ -50,7 +46,7 @@ class OngoingScreen extends StatelessWidget {
               Stack(
                children: [
                  Positioned(
-                   child: Container(
+                   child: SizedBox(
                      width: MediaQuery.of(context).size.width,
                      height: 600,
                      child: Image.asset(
@@ -63,7 +59,7 @@ class OngoingScreen extends StatelessWidget {
                  Positioned(
                    top: 50,
                    left: 20,
-                   child: Container(
+                   child: SizedBox(
                      width: MediaQuery.of(context).size.width,
                      height: 400,
                      child: Image.asset(
@@ -77,7 +73,7 @@ class OngoingScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 35),
-             Padding(padding: EdgeInsets.only(left: 60),
+             Padding(padding: const EdgeInsets.only(left: 60),
               child:  Row(
                 children: [
                   const SizedBox(width: 70),

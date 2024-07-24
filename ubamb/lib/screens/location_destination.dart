@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ubamb/screens/arrived_screen.dart';
-import 'package:ubamb/screens/pickup_location.dart';
 import 'package:ubamb/screens/starttrip_screen.dart';
 import 'home_screen.dart';
 import 'account_screen.dart';
@@ -101,7 +99,7 @@ class LocationDestinationScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 400,
                 child: Image.asset(
@@ -188,7 +186,7 @@ class LocationDestinationScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      Text('Account'),
+                      const Text('Account'),
                     ],
                   ),
                 ],

@@ -30,7 +30,7 @@ class _RatingScreenState extends State<RatingScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title:  Text('Rating', style: TextStyle(color: Colors.black)),
+        title:  const Text('Rating', style: TextStyle(color: Colors.black)),
         elevation: 0,
         centerTitle: true ,
       ),
@@ -56,7 +56,7 @@ class _RatingScreenState extends State<RatingScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
 
                         children: [
-                          Text('Good',
+                          const Text('Good',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
@@ -91,7 +91,7 @@ class _RatingScreenState extends State<RatingScreen> {
                       children: [
                         Row(
                           children: [
-                            SizedBox(width: 50),
+                            const SizedBox(width: 50),
                             Column(
                               children: List.generate(_issues.length ~/ 2, (index) {
                                 final issueIndex = index * 2 ;
@@ -112,7 +112,7 @@ class _RatingScreenState extends State<RatingScreen> {
                                 );
                               }),
                             ),
-                            SizedBox(width: 30),
+                            const SizedBox(width: 30),
                             Column(
                               children: List.generate(_issues.length ~/ 2, (index) {
                                 final issueIndex = index * 2 + 1;
