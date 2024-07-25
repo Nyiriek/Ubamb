@@ -5,11 +5,13 @@ class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> storeUserInfo(String firstName) async {
+  Future<void> storeUserInfo(String firstName, String secondName, String phoneNumber) async {
     User? user = _auth.currentUser;
     if (user != null) {
       await _firestore.collection('users').doc(user.uid).set({
         'firstName': firstName,
+        'secondName': secondName, // New field
+         'phoneNumber': phoneNumber,// New field
         'email': user.email,
         // Add other fields as needed
       });
@@ -26,4 +28,15 @@ class UserService {
     }
     return null;
   }
+  // Future<String?> fetchUserFirstName() async {
+  //   User? user = FirebaseAuth.instance.currentUser;
+  //   if (user != null) {
+  //     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+  //     if (documentSnapshot.exists) {
+  //       Map<String, dynamic>? userData = documentSnapshot.data() as Map<String, dynamic>?;
+  //       return userData?['firstName'];
+  //     }
+  //   }
+  //   return null;
+  // }
 }

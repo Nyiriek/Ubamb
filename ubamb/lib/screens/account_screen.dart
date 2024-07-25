@@ -1,12 +1,49 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ubamb/main.dart';
 import 'package:ubamb/screens/home_screen.dart';
 import 'package:ubamb/screens/profile_screen.dart';
 import 'package:ubamb/screens/ride_history.dart';
 import 'package:ubamb/screens/settings_privacy.dart';
+import 'userinfo.dart';
 
-class AccountScreen extends StatelessWidget {
-  const AccountScreen({super.key});
+
+class AccountScreen extends StatefulWidget {
+
+
+  @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  Future<String?> fetchDocumentId() async {
+    // Fetch the most recent document from Firestore
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('images')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return querySnapshot.docs.first.id;
+    } else {
+      return null; // Return null if no document is found
+    }
+  }
+  Map<String, dynamic>? _userInfo;
+  final UserService _userService = UserService(); // Instantiate UserService
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchUserInfo();
+  }
+  Future<void> _fetchUserInfo() async {
+    Map<String, dynamic>? userInfo = await _userService.fetchUserInfo();
+    setState(() {
+      _userInfo = userInfo;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,30 +72,41 @@ class AccountScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Row(
-                children: [
-                  Container(
-                    width: 73,
-                    height: 73,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/user 1.png'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                children: [ FutureBuilder<String?>(
+                  future: fetchDocumentId(),
+                  builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator()); // Show loading indicator
+                    } else if (snapshot.hasError) {
+                      return Center(child: Icon(Icons.error)); // Show error icon
+                    } else {
+                      return Container(
+                        width: 73,
+                        height: 73,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: ClipOval(
+                          child: ImageDisplayWidget(documentId: snapshot.data),
+                        ),
+                      );
+
+
+                    }
+                  },
+                ),
                   const SizedBox(width: 15),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Ella',
-                        style: TextStyle(
+                        _userInfo != null
+                        ? Text(' ${_userInfo!['firstName']}',  style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
-                        ),
-                      ),
+                        ),)
+                      : SmallLoadingIndicator(),
+
                       const SizedBox(height: 5),
                       Container(
                         width: 139,
@@ -67,14 +115,14 @@ class AccountScreen extends StatelessWidget {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(1000),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '+250791701052',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                          ),
+                        child:  Center(
+                          child: _userInfo != null
+                              ? Text(' ${_userInfo!['phoneNumber']}', style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),)
+                              : SmallLoadingIndicator(),
+
                         ),
                       ),
                     ],
@@ -145,7 +193,7 @@ class AccountScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SettingsPrivacyScreen()),
+                      MaterialPageRoute(builder: (context) =>  SettingsPrivacyScreen()),
                     );
                     },
                     child:buildMenuItem(
@@ -208,7 +256,7 @@ class AccountScreen extends StatelessWidget {
                 thickness: 1,
               ),
               const SizedBox(height: 25),
-               Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Column(
@@ -253,7 +301,6 @@ class AccountScreen extends StatelessWidget {
       ),
     );
   }
-
   Widget buildMenuItem(BuildContext context,
       {required IconData icon, required String text}) {
     return Padding(
@@ -288,3 +335,4 @@ class AccountScreen extends StatelessWidget {
     );
   }
 }
+

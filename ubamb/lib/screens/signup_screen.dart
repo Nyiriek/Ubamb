@@ -16,6 +16,8 @@ class SignUpScreen extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserService _userService = UserService();
   final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
 
   Future<void> _signUp(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -25,7 +27,7 @@ class SignUpScreen extends StatelessWidget {
           email: _emailController.text,
           password: _passwordController.text,
         );
-        await _userService.storeUserInfo(_firstNameController.text);
+        await _userService.storeUserInfo(_firstNameController.text,_lastNameController.text, _phoneNumberController.text );
         if (userCredential.user != null) {
           Navigator.pushReplacement(
             context,
@@ -124,6 +126,7 @@ class SignUpScreen extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: TextFormField(
+                            controller: _lastNameController,
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: 'Last Name',
@@ -172,6 +175,42 @@ class SignUpScreen extends StatelessWidget {
                           }
                           if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                             return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                Container(
+                  width: 334,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextFormField(
+                        controller: _phoneNumberController,
+                        obscureText: false,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: '+254712345678',
+                          hintStyle: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your phone number';
+                          }
+                          if (value.length < 13) {
+                            return 'phone number  must be at least 13 characters long';
                           }
                           return null;
                         },
