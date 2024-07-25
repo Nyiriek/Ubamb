@@ -2,12 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:ubamb/screens/book_ride_screen.dart';
 import 'package:ubamb/screens/ride_history.dart';
 import 'account_screen.dart';
+import 'userinfo.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Map<String, dynamic>? _userInfo;
+  final UserService _userService = UserService(); // Instantiate UserService
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserInfo();
+  }
+
+  Future<void> _fetchUserInfo() async {
+    Map<String, dynamic>? userInfo = await _userService.fetchUserInfo();
+    setState(() {
+      _userInfo = userInfo;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    // return Scaffold(
+    //   appBar: AppBar(title: Text('Home')),
+    //   body:
+    // );
     return Scaffold(
       backgroundColor: const Color(0xFF4CA6F8),
       body: Padding(
@@ -25,13 +50,13 @@ class HomeScreen extends StatelessWidget {
                     // Implement navigation drawer functionality here
                   },
                 ),
-                const Text(
-                  'Welcome Ella!',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 19,
-                    color: Colors.black,
-                  ),
+                const SizedBox(width: 15),
+                Container(
+                  width: 200,
+                  height: 30,
+                  child: _userInfo != null
+                      ? Text('Welcome, ${_userInfo!['firstName']}!', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),)
+                      : SmallLoadingIndicator(),
                 ),
                 IconButton(
                   icon: const Icon(Icons.person, color: Colors.black),
@@ -44,7 +69,8 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 35),
+            const SizedBox(height: 15),
+
             const Text(
               'Your current location',
               style: TextStyle(
@@ -198,4 +224,27 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+class SmallLoadingIndicator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 24.0, // Adjust the width as needed
+        height: 24.0, // Adjust the height as needed
+        child: CircularProgressIndicator(
+          strokeWidth: 2.0, // Adjust the stroke width for the thickness of the indicator
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(title: Text('Small Loading Indicator')),
+      body: SmallLoadingIndicator(),
+    ),
+  ));
 }

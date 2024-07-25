@@ -34,7 +34,7 @@ class _RatingScreenState extends State<RatingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF4CA6F8),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
@@ -44,7 +44,7 @@ class _RatingScreenState extends State<RatingScreen> {
         centerTitle: true ,
       ),
       body: Container(
-        color: Colors.blue,
+        color:  Color(0xFF4CA6F8),
         child: Column(
           children: [
             Expanded(
@@ -52,38 +52,7 @@ class _RatingScreenState extends State<RatingScreen> {
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
-                    Container(
-                      height: 150,
-                      width: 300,
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-
-                        children: [
-                          const Text('Good',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                          )),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(5, (index) {
-                              return Icon(
-                                index < _rating ? Icons.star : Icons.star_border,
-                                size: 40,
-                                color: Colors.black,
-                              );
-                            },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                   RatingPage(),
                     const Divider(
                       color: Color(0xFFC5C5C5),
                       thickness: 2,
@@ -111,14 +80,14 @@ class _RatingScreenState extends State<RatingScreen> {
                                         _isSelected = selected;
                                       });
                                     },
-                                    backgroundColor: Colors.blue[300],
-                                    selectedColor: Colors.blue[500],
+                                    backgroundColor: Color(0xFF2896F9),
+                                    selectedColor:  Color(0xFF4CA6F8),
                                     labelStyle: TextStyle(color: Colors.black, fontSize: 16), // Adjust font size
                                     labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
                                       side: BorderSide(
-                                        color: Colors.blue,
+                                        color:  Color(0xFF4CA6F8),
 
                                       ),
 
@@ -134,14 +103,14 @@ class _RatingScreenState extends State<RatingScreen> {
                                         _isssSelected = selected;
                                       });
                                     },
-                                    backgroundColor: Colors.blue[300],
-                                    selectedColor: Colors.blue[500],
+                                    backgroundColor: Color(0xFF2896F9),
+                                    selectedColor:  Color(0xFF4CA6F8),
                                     labelStyle: TextStyle(color: Colors.black, fontSize: 13), // Adjust font size
                                     labelPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
                                       side: BorderSide(
-                                        color: Colors.blue,
+                                        color:  Color(0xFF4CA6F8),
 
                                       ),
 
@@ -157,14 +126,14 @@ class _RatingScreenState extends State<RatingScreen> {
                                         _issSelected = selected;
                                       });
                                     },
-                                    backgroundColor: Colors.blue[300],
-                                    selectedColor: Colors.blue[500],
+                                    backgroundColor: Color(0xFF2896F9),
+                                    selectedColor:  Color(0xFF4CA6F8),
                                     labelStyle: TextStyle(color: Colors.black, fontSize: 13), // Adjust font size
                                     labelPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
                                       side: BorderSide(
-                                        color: Colors.blue,
+                                        color:  Color(0xFF4CA6F8),
 
                                       ),
 
@@ -187,14 +156,14 @@ class _RatingScreenState extends State<RatingScreen> {
                                         _issssSelected = selected;
                                       });
                                     },
-                                    backgroundColor: Colors.blue[300],
-                                    selectedColor: Colors.blue[500],
+                                    backgroundColor: Color(0xFF2896F9),
+                                    selectedColor:  Color(0xFF4CA6F8),
                                     labelStyle: TextStyle(color: Colors.black, fontSize: 16), // Adjust font size
                                     labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
                                       side: BorderSide(
-                                        color: Colors.blue,
+                                        color:  Color(0xFF4CA6F8),
 
                                       ),
 
@@ -210,14 +179,14 @@ class _RatingScreenState extends State<RatingScreen> {
                                         _isssssSelected = selected;
                                       });
                                     },
-                                    backgroundColor: Colors.blue[300],
-                                    selectedColor: Colors.blue[500],
+                                    backgroundColor: Color(0xFF2896F9),
+                                    selectedColor:  Color(0xFF4CA6F8),
                                     labelStyle: TextStyle(color: Colors.black, fontSize: 13), // Adjust font size
                                     labelPadding: EdgeInsets.symmetric(horizontal: 34, vertical: 8),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
                                       side: BorderSide(
-                                        color: Colors.blue,
+                                        color:  Color(0xFF4CA6F8),
 
                                       ),
 
@@ -233,14 +202,14 @@ class _RatingScreenState extends State<RatingScreen> {
                                         _issssssSelected = selected;
                                       });
                                     },
-                                    backgroundColor: Colors.blue[500],
-                                    selectedColor: Colors.blue[500],
+                                    backgroundColor:  Color(0xFF4CA6F8),
+                                    selectedColor: Color(0xFF4CA6F8),
                                     labelStyle: TextStyle(color: Colors.black, fontSize: 13), // Adjust font size
                                     labelPadding: EdgeInsets.symmetric(horizontal: 38, vertical: 4),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8.0), // Adjust border radius as needed
                                       side: BorderSide(
-                                          color: Colors.blue,
+                                          color:  Color(0xFF4CA6F8),
 
                                       ),
 
@@ -300,5 +269,65 @@ class _RatingScreenState extends State<RatingScreen> {
 
   }
 
+}
+
+class RatingPage extends StatefulWidget {
+  @override
+  _RatingPageState createState() => _RatingPageState();
+}
+
+class _RatingPageState extends State<RatingPage> {
+  int _rating = 0;
+
+  void _setRating(int rating) {
+    setState(() {
+      _rating = rating;
+    });
+  }
+
+  String _getRatingText(int rating) {
+    if (rating <= 1) return 'Bad';
+    if (rating == 2 || rating == 3) return 'Good';
+    return 'Excellent';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 150,
+      width: 300,
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            _getRatingText(_rating),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(5, (index) {
+              return GestureDetector(
+                onTap: () => _setRating(index + 1),
+                child: Icon(
+                  index < _rating ? Icons.star : Icons.star_border,
+                  size: 40,
+                  color: index < _rating ? Colors.black : Colors.grey,
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
 }
 

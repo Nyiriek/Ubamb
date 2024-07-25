@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
 import 'code_screen.dart';
+import "userinfo.dart";
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
@@ -13,6 +14,8 @@ class SignUpScreen extends StatelessWidget {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final UserService _userService = UserService();
+  final _firstNameController = TextEditingController();
 
   Future<void> _signUp(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -22,6 +25,7 @@ class SignUpScreen extends StatelessWidget {
           email: _emailController.text,
           password: _passwordController.text,
         );
+        await _userService.storeUserInfo(_firstNameController.text);
         if (userCredential.user != null) {
           Navigator.pushReplacement(
             context,
@@ -89,6 +93,7 @@ class SignUpScreen extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: TextFormField(
+                            controller: _firstNameController,
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: 'First Name',
