@@ -1,8 +1,12 @@
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:ubamb/screens/book_ride_screen.dart';
 import 'package:ubamb/screens/ride_history.dart';
 import 'account_screen.dart';
 import 'userinfo.dart';
+import 'dart:convert';
+
 
 
 class HomeScreen extends StatefulWidget {
@@ -13,13 +17,43 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic>? _userInfo;
   final UserService _userService = UserService(); // Instantiate UserService
+  String _locationMessage = 'Unknown';
 
   @override
   void initState() {
     super.initState();
+    _getCurrentLocationAndAddress();
     _fetchUserInfo();
   }
 
+  String _address = '';
+  final String openCageApiKey = '0f7590f595cd460e8050da9a3eeddef7';
+
+
+  Future<void> _getCurrentLocationAndAddress() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      String url =
+          'https://api.opencagedata.com/geocode/v1/json?q=${position.latitude}+${position.longitude}&key=$openCageApiKey';
+      http.Response response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> result = jsonDecode(response.body);
+        String address = result['results'][0]['formatted'];
+        setState(() {
+          _address = address;
+        });
+      } else {
+        setState(() {
+          _address = 'Error: Failed to load address';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _address = 'Error: $e';
+      });
+    }
+  }
   Future<void> _fetchUserInfo() async {
     Map<String, dynamic>? userInfo = await _userService.fetchUserInfo();
     setState(() {
@@ -71,24 +105,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 15),
 
-            const Text(
-              'Your current location',
-              style: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 16,
-                color: Color.fromARGB(255, 92, 92, 92),
-              ),
-            ),
+            Text("Your current location", style: TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 16,
+              color: Color.fromARGB(255, 92, 92, 92),
+            ),),
             const SizedBox(height: 10),
-            const Row(
+             Row(
               children: [
                 Icon(Icons.location_on, color: Colors.blue),
                 SizedBox(width: 5),
                 Text(
-                  'Flamingo Estate, Nakuru',
+                  _address,
                   style: TextStyle(
                     fontFamily: 'Hind',
-                    fontSize: 20,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
