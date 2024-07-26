@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ubamb/screens/account_screen.dart';
 import 'package:ubamb/screens/home_screen.dart';
@@ -19,18 +20,35 @@ class  ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State< ProfileScreen> {
-  Future<String?> fetchDocumentId() async {
-    // Fetch the most recent document from Firestore
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('images')
-        .orderBy('timestamp', descending: true)
-        .limit(1)
-        .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      return querySnapshot.docs.first.id;
-    } else {
-      return null; // Return null if no document is found
+  Future<String?> fetchDocumentId() async {
+    try {
+      // Check if the user is authenticated
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        print('User is not authenticated');
+        return null;
+      }
+
+      String userId = user.uid;
+
+      // Fetch the most recent document from Firestore related to the user's userId
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('images')
+          .where('userId', isEqualTo: userId) // Filter by userId
+          .orderBy('timestamp', descending: true)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.id;
+      } else {
+        print('No document found for user ID: $userId');
+        return null; // Return null if no document is found
+      }
+    } catch (e) {
+      print('Error fetching document ID: $e');
+      return null;
     }
   }
   Map<String, dynamic>? _userInfo;
@@ -112,11 +130,14 @@ class _ProfileScreenState extends State< ProfileScreen> {
                             shape: BoxShape.circle,
                           ),
                           child: ClipOval(
-                            child: ImageDisplayWidget(documentId: snapshot.data),
+                            child: FittedBox(
+                              fit: BoxFit.cover, // Adjust this as needed
+                              child: ImageDisplayWidget(
+                                documentIdStream: Stream.value(snapshot.data),
+                              ),
+                            ),
                           ),
                         );
-
-
                       }
                     },
                   ),
