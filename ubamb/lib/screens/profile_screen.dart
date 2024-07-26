@@ -1,11 +1,80 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ubamb/screens/account_screen.dart';
 import 'package:ubamb/screens/home_screen.dart';
+import 'package:ubamb/screens/settings_privacy.dart';
+import 'userinfo.dart';
 import 'package:ubamb/screens/ride_history.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
 
+
+class  ProfileScreen extends StatefulWidget {
+  const  ProfileScreen({super.key});
+
+  @override
+  State< ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State< ProfileScreen> {
+  Future<String?> fetchDocumentId() async {
+    // Fetch the most recent document from Firestore
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('images')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return querySnapshot.docs.first.id;
+    } else {
+      return null; // Return null if no document is found
+    }
+  }
+  Map<String, dynamic>? _userInfo;
+  final UserService _userService = UserService(); // Instantiate UserService
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocationAndAddress();
+    _fetchUserInfo();
+  }
+  Future<void> _fetchUserInfo() async {
+    Map<String, dynamic>? userInfo = await _userService.fetchUserInfo();
+    setState(() {
+      _userInfo = userInfo;
+    });
+  }
+  String _address = '';
+  final String openCageApiKey = '0f7590f595cd460e8050da9a3eeddef7';
+
+
+  Future<void> _getCurrentLocationAndAddress() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      String url =
+          'https://api.opencagedata.com/geocode/v1/json?q=${position.latitude}+${position.longitude}&key=$openCageApiKey';
+      http.Response response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> result = jsonDecode(response.body);
+        String address = result['results'][0]['formatted'];
+        setState(() {
+          _address = address;
+        });
+      } else {
+        setState(() {
+          _address = 'Error: Failed to load address';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _address = 'Error: $e';
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,18 +88,7 @@ class ProfileScreen extends StatelessWidget {
           },
         ),
 
-        //
-        // title: const Text('Ella'),
-        // centerTitle: true,
-        // actions: const [
-        //   Padding(
-        //     padding: EdgeInsets.all(8.0),
-        //     child: CircleAvatar(
-        //       backgroundColor: Colors.grey,
-        //       child: Icon(Icons.person, color: Colors.white),
-        //     ),
-        //   ),
-        // ],
+
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -39,28 +97,41 @@ class ProfileScreen extends StatelessWidget {
               child: Row(
                 children: [
                   const SizedBox(width: 50),
-                  const CircleAvatar(
-                    radius: 30.0, // Adjust the radius as needed
-                    backgroundColor:
-                        Colors.grey, // Set the background color of the circle
-                    child: Icon(
-                      Icons.person, // Set the icon to display
-                      size: 50.0, // Adjust the size of the icon as needed
-                      color: Color(0xFF4CA6F8), // Set the color of the icon
-                    ),
+                  FutureBuilder<String?>(
+                    future: fetchDocumentId(),
+                    builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator()); // Show loading indicator
+                      } else if (snapshot.hasError) {
+                        return Center(child: Icon(Icons.error)); // Show error icon
+                      } else {
+                        return Container(
+                          width: 73,
+                          height: 73,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: ClipOval(
+                            child: ImageDisplayWidget(documentId: snapshot.data),
+                          ),
+                        );
+
+
+                      }
+                    },
                   ),
                   const SizedBox(width: 15),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Ella',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
+                      _userInfo != null
+                          ? Text(' ${_userInfo!['firstName']}',  style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),)
+                          : SmallLoadingIndicator(),
+
                       const SizedBox(height: 4.0),
                       Container(
                         width: 151,
@@ -69,13 +140,15 @@ class ProfileScreen extends StatelessWidget {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Text(
-                          'ellapeter@gmail.com',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                          ),
-                        ),
+                        child: _userInfo != null
+                            ? Text(' ${_userInfo!['email']}',   style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),)
+                            : SmallLoadingIndicator(),
+
+
+
                       ),
                     ],
                   ),
@@ -84,7 +157,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.all(16.0),
-              child: const Column(
+              child:  Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
@@ -116,23 +189,22 @@ class ProfileScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Full Name: Ella Peter'),
+                          _userInfo != null
+                              ? Text('Full Name:  ${_userInfo!['firstName']} ${_userInfo!['secondName']}')
+                              : SmallLoadingIndicator(),
                           SizedBox(height: 8.0),
-                          Text('Address:'),
-                          Text('456 Ngong Road'),
-                          Text('Nairobi, Kenya'),
+
+                          Text("Address:    ${_address}"),
+                          Text('Date of birth: 01/01/1999'),
+                          SizedBox(height: 0),
+                          _userInfo != null
+                              ? Text('Contact:  ${_userInfo!['phoneNumber']} ')
+                              : SmallLoadingIndicator(),
+
                         ],
                       ),
                       SizedBox(width: 40),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 0),
-                          Text('Date of birth: 01/01/1999'),
-                          SizedBox(height: 20),
-                          Text('Contact: 25479378950'),
-                        ],
-                      ),
+
                     ],
                   ),
                   SizedBox(height: 16.0),
@@ -186,7 +258,7 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     IconButton(
                       icon:
-                          const Icon(Icons.home, size: 31, color: Colors.black),
+                      const Icon(Icons.home, size: 31, color: Colors.black),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -223,7 +295,7 @@ class ProfileScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const AccountScreen()),
+                              builder: (context) =>  AccountScreen()),
                         );
                       },
                     ),
@@ -238,3 +310,4 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
+

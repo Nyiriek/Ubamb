@@ -1,10 +1,142 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
+
 import 'package:ubamb/screens/account_screen.dart';
 import 'package:ubamb/screens/home_screen.dart';
 import 'package:ubamb/screens/ride_history.dart';
+import 'userinfo.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
 
-class SettingsPrivacyScreen extends StatelessWidget {
-  const SettingsPrivacyScreen({super.key});
+
+
+
+
+
+class SettingsPrivacyScreen extends StatefulWidget {
+
+  @override
+  State<SettingsPrivacyScreen> createState() => _SettingsPrivacyScreenState();
+}
+
+class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
+  Future<String?> fetchDocumentId() async {
+    // Fetch the most recent document from Firestore
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('images')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return querySnapshot.docs.first.id;
+    } else {
+      return null; // Return null if no document is found
+    }
+  }
+  Map<String, dynamic>? _userInfo;
+  final UserService _userService = UserService(); // Instantiate UserService
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocationAndAddress();
+    _fetchUserInfo();
+  }
+  Future<void> _fetchUserInfo() async {
+    Map<String, dynamic>? userInfo = await _userService.fetchUserInfo();
+    setState(() {
+      _userInfo = userInfo;
+    });
+  }
+  String _address = '';
+  final String openCageApiKey = '0f7590f595cd460e8050da9a3eeddef7';
+
+
+  Future<void> _getCurrentLocationAndAddress() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      String url =
+          'https://api.opencagedata.com/geocode/v1/json?q=${position.latitude}+${position.longitude}&key=$openCageApiKey';
+      http.Response response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> result = jsonDecode(response.body);
+        String address = result['results'][0]['formatted'];
+        setState(() {
+          _address = address;
+        });
+      } else {
+        setState(() {
+          _address = 'Error: Failed to load address';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _address = 'Error: $e';
+      });
+    }
+  }
+  File? _image;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        _uploadImage(_image!);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future<void> _uploadImage(File imageFile) async {
+    try {
+      if (FirebaseAuth.instance.currentUser == null) {
+        print('User is not authenticated');
+        return;
+      }
+
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+      print('Authenticated user ID: $userId');
+
+      firebase_storage.Reference storageReference = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('images/${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+      firebase_storage.UploadTask uploadTask = storageReference.putFile(imageFile);
+      await uploadTask;
+
+      String downloadURL = await storageReference.getDownloadURL();
+
+      await FirebaseFirestore.instance.collection('images').add({
+        'url': downloadURL,
+        'timestamp': DateTime.now(),
+        'userId': userId, // Ensure this field is included
+      }).then((docRef) {
+        print('Image uploaded and reference stored in Firestore with document ID: ${docRef.id}');
+      }).catchError((error) {
+        print('Error adding document: $error');
+      });
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,81 +160,94 @@ class SettingsPrivacyScreen extends StatelessWidget {
                     },
                   ),
                   const Padding(padding: EdgeInsets.only(left: 30),
-                  child: Text('Settings and Privacy', style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold)),
+                    child: Text('Settings and Privacy', style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
               Padding(padding: const EdgeInsets.only(left: 40),
-              child: Row(
-                children: [
-                  Stack(
-                    children:[
-                      Positioned(
-                        child:
-                        Container(
-                          width: 73,
-                          height: 73,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/user 1.png'),
-                              fit: BoxFit.cover,
-                            ),
+                child: Row(
+                  children: [
+                    Stack(
+                      children:[
+                        Positioned(
+                          child: FutureBuilder<String?>(
+                            future: fetchDocumentId(),
+                            builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Center(child: CircularProgressIndicator()); // Show loading indicator
+                              } else if (snapshot.hasError) {
+                                return Center(child: Icon(Icons.error)); // Show error icon
+                              } else {
+                                return Container(
+                                  width: 73,
+                                  height: 73,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: ClipOval(
+                                    child: ImageDisplayWidget(documentId: snapshot.data),
+                                  ),
+                                );
+
+
+                              }
+                            },
                           ),
                         ),
-                      ),
-                      Positioned(
-                        top: 45,
-                        left: 40,
-                        child:
-                        Container(
-
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
+                        Positioned(
+                          top: 35,
+                          left: 30,
+                          child:
+                            Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon:  Icon(Icons.edit, color: Colors.black, size: 30),
+                                onPressed: _pickImage,
+                              ),
+                              // child: IconButton( child: ,)
                             ),
+                          ),
 
 
-                            child: const Icon(Icons.edit, color: Colors.black, size: 30)
-                        ),
-                      ),
+                      ],
+                    ),
+                    const SizedBox(width: 25),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _userInfo != null
+                            ? Text(' ${_userInfo!['firstName']}',  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                        ):
 
-                    ],
-                  ),
-                  const SizedBox(width: 25),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Ella',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Container(
-                        width: 139,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(1000),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            '+250791701052',
-                            style: TextStyle(
+
+                        const SizedBox(height: 5),
+                        Container(
+                          width: 139,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(1000),
+                          ),
+                          child:  Center(
+                            child:  _userInfo != null
+                                ? Text(' ${_userInfo!['phoneNumber']}', style: TextStyle(
                               fontSize: 16,
                               color: Colors.black,
-                            ),
+                            ),)
+                                : SmallLoadingIndicator(),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 30),
               Column(
@@ -119,208 +264,208 @@ class SettingsPrivacyScreen extends StatelessWidget {
                   ),
 
                   Padding(padding: const EdgeInsets.only(left: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Full Name:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      const SizedBox(height: 2),
-                      Container(
-                        width: 307,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Full Name:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
 
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Ella James',
-                                hintStyle: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  color: Colors.black,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Ella James',
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text("Date of birth:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      const SizedBox(height: 2),
-                      Container(
-                        width: 307,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        const SizedBox(height: 10),
+                        const Text("Date of birth:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
 
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: '01/01/1999',
-                                hintStyle: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  color: Colors.black,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: '01/01/1999',
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text("Contact:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      const SizedBox(height: 2),
-                      Container(
-                        width: 307,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        const SizedBox(height: 10),
+                        const Text("Contact:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
 
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: '25479378950',
-                                hintStyle: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  color: Colors.black,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: '25479378950',
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text("Address:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      const SizedBox(height: 2),
-                      Container(
-                        width: 307,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        const SizedBox(height: 10),
+                        const Text("Address:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
 
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: ' 456 Ngong Road, Nairobi, Kenya',
-                                hintStyle: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  color: Colors.black,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: ' 456 Ngong Road, Nairobi, Kenya',
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      const Row(
-                        children: [
-                          Text("Edit transportation preferences", style: TextStyle(color: Colors.black, fontSize: 25, decoration: TextDecoration.underline , fontWeight: FontWeight.bold),),
-                          SizedBox(width: 5),
-                          Icon(Icons.edit, color: Colors.black, size: 20),
+                        const SizedBox(height: 20),
+                        const Row(
+                          children: [
+                            Text("Edit transportation preferences", style: TextStyle(color: Colors.black, fontSize: 20, decoration: TextDecoration.underline , fontWeight: FontWeight.bold),),
+                            SizedBox(width: 5),
+                            Icon(Icons.edit, color: Colors.black, size: 20),
 
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      const Text("Preferred Hospital or Birthing Center:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      const SizedBox(height: 2),
-                      Container(
-                        width: 307,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-
+                          ],
                         ),
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Aga Khan Hospital',
-                                hintStyle: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  color: Colors.black,
+                        const SizedBox(height: 10),
+                        const Text("Preferred Hospital or Birthing Center:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Aga Khan Hospital',
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text("Preferred Mode of Transport:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      const SizedBox(height: 2),
-                      Container(
-                        width: 307,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        const SizedBox(height: 10),
+                        const Text("Preferred Mode of Transport:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
 
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Ambulance',
-                                hintStyle: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  color: Colors.black,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Ambulance',
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text("Special Transportation Needs:", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      const SizedBox(height: 2),
-                      Container(
-                        width: 307,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        const SizedBox(height: 10),
+                        const Text("Special Transportation Needs:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
 
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Ambulance',
-                                hintStyle: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  color: Colors.black,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Ambulance',
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                   ),
                 ],
 
@@ -364,14 +509,14 @@ class SettingsPrivacyScreen extends StatelessWidget {
                       const Text('History'),
                     ],
                   ),
-                   Column(
+                  Column(
                     children: [
                       IconButton(
                         icon:  const Icon(Icons.account_circle, size: 31, color: Colors.black),
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const  AccountScreen()),
+                            MaterialPageRoute(builder: (context) =>   AccountScreen()),
                           );
                         },
                       ),
@@ -388,7 +533,6 @@ class SettingsPrivacyScreen extends StatelessWidget {
       ),
     );
   }
-
   Widget buildMenuItem(BuildContext context,
       {required IconData icon, required String text}) {
     return Padding(
@@ -425,6 +569,61 @@ class SettingsPrivacyScreen extends StatelessWidget {
 }
 
 
+
+
+
+
+class ImageDisplayWidget extends StatefulWidget {
+  final String? documentId;
+
+  ImageDisplayWidget({required this.documentId});
+
+  @override
+  _ImageDisplayWidgetState createState() => _ImageDisplayWidgetState();
+}
+
+class _ImageDisplayWidgetState extends State<ImageDisplayWidget> {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.documentId == null) {
+      // Display the user's initials if no document ID is available
+      return Center(
+        child: Container(
+          width: 73,
+          height: 73,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            shape: BoxShape.circle,
+
+          ),
+
+          child: Text(
+            'JD', // Replace with the user's initials logic
+            style: TextStyle(fontSize: 24, color: Colors.black),
+          ),
+        ),
+      );
+    }
+
+    return FutureBuilder(
+      future: FirebaseFirestore.instance.collection('images').doc(widget.documentId!).get(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator()); // Show loading indicator
+        } else if (snapshot.hasError) {
+          return Center(child: Icon(Icons.error)); // Show error icon
+        } else if (!snapshot.hasData || !snapshot.data!.exists) {
+          return Center(child: Icon(Icons.image)); // Show placeholder if no image found
+        } else {
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          String imageUrl = data['url']; // Assuming the image URL is stored under 'url'
+          return Center(child: Image.network(imageUrl));
+        }
+      },
+    );
+  }
+}
 
 
 

@@ -163,7 +163,7 @@ class PickupLocationScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const AccountScreen()),
+                            MaterialPageRoute(builder: (context) =>  AccountScreen()),
                           );
                         },
                       ),
