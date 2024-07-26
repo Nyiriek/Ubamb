@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Color.fromARGB(255, 92, 92, 92),
             ),),
             const SizedBox(height: 10),
-             Row(
+            Row(
               children: [
                 Icon(Icons.location_on, color: Colors.blue),
                 SizedBox(width: 5),

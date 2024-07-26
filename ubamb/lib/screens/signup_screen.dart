@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:ubamb/screens/home_screen.dart';
 import 'login_screen.dart';
 import 'code_screen.dart';
-import "userinfo.dart";
+import 'userinfo.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
@@ -11,8 +13,7 @@ class SignUpScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserService _userService = UserService();
   final _firstNameController = TextEditingController();
@@ -22,8 +23,7 @@ class SignUpScreen extends StatelessWidget {
   Future<void> _signUp(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       try {
-        UserCredential userCredential =
-            await _auth.createUserWithEmailAndPassword(
+        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
@@ -31,7 +31,7 @@ class SignUpScreen extends StatelessWidget {
         if (userCredential.user != null) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
           );
         }
       } catch (e) {
@@ -40,6 +40,92 @@ class SignUpScreen extends StatelessWidget {
         }
       }
     }
+  }
+
+  Future<void> _signInWithGoogle(BuildContext context) async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      UserCredential userCredential = await _auth.signInWithCredential(credential);
+      if (userCredential.user != null) {
+        await _showPasswordDialog(context, googleUser!.email);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  Future<void> _showPasswordDialog(BuildContext context, String email) async {
+    TextEditingController passwordController = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter Password for $email'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(hintText: 'Password'),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Submit'),
+              onPressed: () async {
+                try {
+                  User? user = _auth.currentUser;
+                  if (user != null && user.email != null) {
+                    AuthCredential credential = EmailAuthProvider.credential(
+                      email: user.email!,
+                      password: passwordController.text.trim(),
+                    );
+                    await user.reauthenticateWithCredential(credential);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Login successful'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                    Navigator.of(context).pop(); // Close the dialog
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Wrong password: $e'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -362,8 +448,7 @@ class SignUpScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            const CodeScreen(phoneNumber: '+250791701052'),
+                        builder: (context) => const CodeScreen(phoneNumber: '+250791701052'),
                       ),
                     );
                   },
@@ -377,33 +462,36 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Container(
-                  width: 334,
-                  height: 40,
-                  margin: const EdgeInsets.only(top: 10, bottom: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: Image.asset(
-                          'assets/images/google.png',
-                          height: 20,
+                GestureDetector(
+                  onTap: () => _signInWithGoogle(context),
+                  child: Container(
+                    width: 334,
+                    height: 40,
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Image.asset(
+                            'assets/images/google.png',
+                            height: 20,
+                          ),
                         ),
-                      ),
-                      const Text(
-                        'Continue with Google',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        const Text(
+                          'Sign in with Google',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
