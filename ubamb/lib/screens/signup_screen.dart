@@ -31,7 +31,7 @@ class SignUpScreen extends StatelessWidget {
         if (userCredential.user != null) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+            MaterialPageRoute(builder: (context) => SignUpScreen()),
           );
         }
       } catch (e) {
@@ -42,26 +42,36 @@ class SignUpScreen extends StatelessWidget {
     }
   }
 
-  Future<void> _signInWithGoogle(BuildContext context) async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+Future<void> _signInWithGoogle(BuildContext context) async {
+  try {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+    if (googleUser != null) {
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
 
       UserCredential userCredential = await _auth.signInWithCredential(credential);
+
       if (userCredential.user != null) {
-        await _showPasswordDialog(context, googleUser!.email);
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
+        // User is successfully signed in, navigate to the home screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
       }
     }
+  } catch (e) {
+    if (kDebugMode) {
+      print(e);
+    }
   }
+}
+
 
   Future<void> _showPasswordDialog(BuildContext context, String email) async {
     TextEditingController passwordController = TextEditingController();
