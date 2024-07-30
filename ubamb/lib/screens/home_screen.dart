@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 246,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                image: const DecorationImage(
+                image: DecorationImage(
                   image: AssetImage('assets/images/Group 23.png'),
                   fit: BoxFit.cover,
                 ),
@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
             GestureDetector(
               onTap: () {Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const BookRideScreen()),
+                MaterialPageRoute(builder: (context) => BookRideScreen()),
               );
               },
               child:Container(

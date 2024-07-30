@@ -234,7 +234,7 @@ class _RatingScreenState extends State<RatingScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const BookRideScreen()),
+                            builder: (context) => BookRideScreen()),
                       );
                     },
                     child: Container(
