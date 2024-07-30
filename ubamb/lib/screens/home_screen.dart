@@ -31,6 +31,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   Future<void> _getCurrentLocationAndAddress() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      setState(() {
+        _address = 'Error: Location services are disabled.';
+      });
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          _address = 'Error: Location permissions are denied';
+        });
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _address = 'Error: Location permissions are permanently denied, we cannot request permissions.';
+      });
+      return;
+    }
+
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
