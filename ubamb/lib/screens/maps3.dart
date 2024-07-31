@@ -85,7 +85,7 @@ class _MyHomePageState extends State<MapsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: currentLocatioN == null
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: Text("Loading..."))
           : Column(
           children: [
             Row(

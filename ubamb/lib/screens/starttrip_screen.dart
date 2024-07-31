@@ -1,8 +1,83 @@
+import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:ubamb/screens/maps4.dart';
 import 'package:ubamb/screens/ongoing_screen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 
-class TripScreen extends StatelessWidget {
+
+class TripScreen extends StatefulWidget {
   const TripScreen({super.key});
+
+  @override
+  State<TripScreen> createState() => _TripScreenState();
+}
+
+class _TripScreenState extends State<TripScreen> {
+
+  final String openCageApiKey = '0f7590f595cd460e8050da9a3eeddef7';
+  String _address = '';
+  Future<void> _getCurrentLocationAndAddress() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      setState(() {
+        _address = 'Error: Location services are disabled.';
+      });
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          _address = 'Error: Location permissions are denied';
+        });
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _address = 'Error: Location permissions are permanently denied, we cannot request permissions.';
+      });
+      return;
+    }
+
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      String url =
+          'https://api.opencagedata.com/geocode/v1/json?q=${position.latitude}+${position.longitude}&key=$openCageApiKey';
+      http.Response response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> result = jsonDecode(response.body);
+        String address = result['results'][0]['formatted'];
+        setState(() {
+          _address = address;
+        });
+      } else {
+        setState(() {
+          _address = 'Error: Failed to load address';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _address = 'Error';
+      });
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocationAndAddress();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +99,7 @@ class TripScreen extends StatelessWidget {
             flex: 2,
             child: Container(
               width: double.infinity,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/map1.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
+              child: MapsScreen1(),
             ),
           ),
           Expanded(
@@ -40,8 +110,8 @@ class TripScreen extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: Color(0xFF4CA6F8),
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
               ),
               child: Padding(
@@ -81,7 +151,7 @@ class TripScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8.0),
-                    const Row(
+                     Row(
                       children: [
                         Icon(
                           Icons.location_on,
@@ -99,10 +169,10 @@ class TripScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4.0),
-                    const Text(
-                      'Zimmerman Roysambu',
+                    Text(
+                     _address,
                       style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: 15.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -129,7 +199,7 @@ class TripScreen extends StatelessWidget {
                     const Text(
                       'Aga Khan Hospital, Parklands',
                       style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: 15.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -172,3 +242,4 @@ class TripScreen extends StatelessWidget {
     );
   }
 }
+

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:ubamb/screens/arrived_screen.dart';
+import 'package:ubamb/screens/maps4.dart';
 
-class OngoingScreen extends StatelessWidget {
+
+class OngoingScreen extends StatefulWidget {
   const OngoingScreen({super.key});
 
+  @override
+  State<OngoingScreen> createState() => _OngoingScreenState();
+}
+
+class _OngoingScreenState extends State<OngoingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,85 +37,69 @@ class OngoingScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 55),
                   const Text('Your ride has started ',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 19,
-                  ),),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 19,
+                    ),),
                 ],
               ),
               const Padding(padding: EdgeInsets.only(left: 140, top: 30),
-              child: Text('Ongoing trip ',
-                style: TextStyle(
-                  color: Color(0xFF01AD1F),
-                  fontSize: 20,
-                ),),),
+                child: Text('Ongoing trip ',
+                  style: TextStyle(
+                    color: Color(0xFF01AD1F),
+                    fontSize: 20,
+                  ),),),
               const SizedBox(height: 20),
               Stack(
-               children: [
-                 Positioned(
-                   child: SizedBox(
-                     width: MediaQuery.of(context).size.width,
-                     height: 600,
-                     child: Image.asset(
-                       'assets/images/img_14.png',
-                       width: MediaQuery.of(context).size.width,
-                       fit: BoxFit.cover,
-                     ),
-                   ),
-                 ),
-                 Positioned(
-                   top: 50,
-                   left: 20,
-                   child: SizedBox(
-                     width: MediaQuery.of(context).size.width,
-                     height: 400,
-                     child: Image.asset(
-                       'assets/images/img_15.png',
-                       width: MediaQuery.of(context).size.width,
-                       fit: BoxFit.cover,
-                     ),
-                   ),
-                 ),
-               ],
+                children: [
+                  Positioned(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 500,
+                      child: MapsScreen1(),
+                    ),
+                  ),
+
+                ],
               ),
 
               const SizedBox(height: 35),
-             Padding(padding: const EdgeInsets.only(left: 60),
-              child:  Row(
-                children: [
-                  const SizedBox(width: 70),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ArrivedScreen()),
-                      );
-                    },
-                    child: Container(
-                      width: 128,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(7),
-                      ),
+              Padding(padding: const EdgeInsets.only(left: 60),
+                child:  Row(
+                  children: [
+                    const SizedBox(width: 70),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ArrivedScreen()),
+                        );
+                      },
+                      child: Container(
+                        width: 128,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
 
-                      child: const Center(
-                        child: Text(
-                          'OK',
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 25,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
+                        child: const Center(
+                          child: Text(
+                            'Arrived?',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 25,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-             ),
 
 
             ],
@@ -152,3 +143,4 @@ class OngoingScreen extends StatelessWidget {
     );
   }
 }
+

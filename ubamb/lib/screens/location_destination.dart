@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:ubamb/screens/account_screen.dart';
 import 'package:ubamb/screens/home_screen.dart';
+import 'package:ubamb/screens/maps2.dart';
 import 'package:ubamb/screens/maps3.dart';
 import 'package:ubamb/screens/starttrip_screen.dart';
 import 'map_provider.dart'; // Import the MapProvider
@@ -206,7 +207,7 @@ class _LocationDestinationScreenState extends State<LocationDestinationScreen> {
             const SizedBox(height: 20),
             Container(
               height: 300,
-              child: MapsScreen(),
+              child: MpasScreen1(),
             ),
 
             const SizedBox(height: 50),

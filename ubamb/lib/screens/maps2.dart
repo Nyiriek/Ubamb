@@ -13,7 +13,8 @@ class MpasScreen1 extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MpasScreen1> {
-  String googleAPiKey = "AIzaSyC_C1dMtojjSM0aIlJPTE35-1XoscjuFhI";
+  String placeName = "Loading...";
+  String googleAPiKey = "AIzaSyBC-Vqf1uWwI6t57xo00OnzBf6LcqxsQ2E";
   final Completer<GoogleMapController> _controller = Completer();
   LocationData? currentLocatioN;
   Location location = Location();
@@ -34,7 +35,19 @@ class _MyHomePageState extends State<MpasScreen1> {
       setState(() {});
     });
   }
-
+  Future<void> _goToCurrentLocation() async {
+    final GoogleMapController controller = await _controller.future;
+    if (currentLocatioN != null) {
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(currentLocatioN!.latitude!, currentLocatioN!.longitude!),
+            zoom: 15,
+          ),
+        ),
+      );
+    }
+  }
   Future<void> _fetchNearbyPlaces(String type) async {
     if (currentLocatioN == null) return;
 
@@ -66,8 +79,11 @@ class _MyHomePageState extends State<MpasScreen1> {
     return Scaffold(
 
       body: currentLocatioN == null
-          ?  Container(child: CircularProgressIndicator())
-          : Column(
+          ?  Center(child:Text("Loading..."))
+          : Stack(
+        children: [
+          Positioned(
+            child: Column(
 
         children: [
 
@@ -81,18 +97,39 @@ class _MyHomePageState extends State<MpasScreen1> {
                 ElevatedButton(onPressed:  () => _fetchNearbyPlaces('government_office'),  child: Icon(Icons.account_balance))
               ]
           ),
-          Container(height: 300, child: GoogleMap(
+          Container(height: 250, child: GoogleMap(
             initialCameraPosition: CameraPosition(
               target: LatLng(currentLocatioN!.latitude!, currentLocatioN!.longitude!),
               zoom: 15,
             ),
-            markers: markers,
+
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
+            },
+            markers: {
+              Marker(
+                markerId: MarkerId('source'),
+                position: LatLng(currentLocatioN!.latitude!, currentLocatioN!.longitude!),
+                infoWindow: InfoWindow(
+                  title: placeName,
+                ),
+              ),
             },
           ),)
         ]
       ),
+      ),
+          Positioned(
+            top: 145,
+            right: 5,
+            child: FloatingActionButton(
+
+              onPressed: _goToCurrentLocation,
+              child: Icon(Icons.my_location,),
+            ),
+          ),
+    ],
+      )
     );
   }
 }
