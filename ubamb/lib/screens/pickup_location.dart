@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ubamb/screens/location_destination.dart';
+import 'package:ubamb/screens/maps2.dart';
 import 'home_screen.dart';
 import 'account_screen.dart';
 import 'package:http/http.dart' as http;
@@ -18,8 +19,7 @@ class PickupLocationScreen extends StatefulWidget {
 
 
 class _PickupLocationScreenState extends State<PickupLocationScreen> {
-  final String googlePlacesApiKey = 'AIzaSyBtLcz3wFle9yVX1qIMYkslV9VYNxTog3E';
-  final Completer<GoogleMapController> _controller = Completer();
+  final String googlePlacesApiKey = 'AIzaSyC_C1dMtojjSM0aIlJPTE35-1XoscjuFhI ';
 
 
   String _address = '';
@@ -29,7 +29,38 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
   LatLng? _currentLocation;
 
 
+
   Future<void> _getCurrentLocationAndAddress() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      setState(() {
+        _address = 'Error: Location services are disabled.';
+      });
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          _address = 'Error: Location permissions are denied';
+        });
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _address = 'Error: Location permissions are permanently denied, we cannot request permissions.';
+      });
+      return;
+    }
+
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
@@ -41,12 +72,6 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
         String address = result['results'][0]['formatted'];
         setState(() {
           _address = address;
-          _currentLocation = LatLng(position.latitude, position.longitude);
-          _markers.add(Marker(
-            markerId: MarkerId('currentLocation'),
-            position: _currentLocation!,
-            infoWindow: InfoWindow(title: 'Your Location', snippet: _address),
-          ));
         });
       } else {
         setState(() {
@@ -55,9 +80,16 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
       }
     } catch (e) {
       setState(() {
-        _address = 'Error: $e';
+        _address = 'Error';
       });
     }
+  }
+  Future<void> _refreshScreen() async {
+    setState(() {
+      // Trigger a rebuild of the widget tree
+    });
+
+    await _getCurrentLocationAndAddress(); // Example: Refetch document ID
   }
   Future<void> _searchNearbyPlaces(String type) async {
     if (_currentLocation == null) return;
@@ -80,13 +112,7 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
       });
     }
   }
-  Future<void> _refreshScreen() async {
-    setState(() {
-      // Trigger a rebuild of the widget tree
-    });
 
-    await _getCurrentLocationAndAddress();
-  }
   @override
   void initState() {
     super.initState();
@@ -97,10 +123,8 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF4CA6F8),
-      body: RefreshIndicator(
-        onRefresh: _refreshScreen,
-        child: SingleChildScrollView(
-          child: Padding(
+      body:
+           Padding(
             padding: const EdgeInsets.all(0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,53 +147,7 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
                 ),
                 Container(
                   height: 350,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () => _searchNearbyPlaces('restaurant'),
-                            child: Text('Restaurants'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => _searchNearbyPlaces('lodging'),
-                            child: Text('Hotels'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => _searchNearbyPlaces('hospital'),
-                            child: Text('Hospitals'),
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onVerticalDragUpdate: (details) {
-                          // Prevent vertical scroll events from reaching the SingleChildScrollView
-                        },
-
-                        // Adjust the height as needed
-                        child: Container(
-                          height: 300,
-                          child: GoogleMap(
-
-                            onMapCreated: (controller) {
-                              setState(() {
-                                _mapController = controller;
-                              });
-                            },
-                            initialCameraPosition: CameraPosition(
-                              target: _currentLocation ?? LatLng(0, 0),
-                              zoom: 15,
-                            ),
-                            markers: _markers,
-                            cloudMapId: '34a385aaf8f3110e',
-
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  ),
+                  child: MpasScreen1(),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(left: 70, top: 16.0),
@@ -226,7 +204,7 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 75),
+                const SizedBox(height: 45),
                 Row(
                   children: [
                     const SizedBox(width: 30),
@@ -260,7 +238,7 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 30),
                 const Divider(
                   color: Colors.black,
                   thickness: 2,
@@ -308,8 +286,7 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
               ],
             ),
           ),
-        ),
-      ),
+
     );
   }
   Widget buildMenuItem(BuildContext context,

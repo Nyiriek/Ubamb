@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:ubamb/screens/maps.dart';
 import 'package:ubamb/screens/pickup_location.dart';
 import 'home_screen.dart';
 import 'account_screen.dart';
@@ -95,7 +96,7 @@ class _BookRideScreenState extends State<BookRideScreen> {
       backgroundColor: const Color(0xFF4CA6F8),
       body: RefreshIndicator(
         onRefresh: _refreshScreen,
-        child:  SingleChildScrollView(
+
           child: Padding(
             padding: const EdgeInsets.all(0),
             child: Column(
@@ -117,58 +118,16 @@ class _BookRideScreenState extends State<BookRideScreen> {
                     ),
                   ],
                 ),
-                Container(
-                  height: 400,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () => _searchNearbyPlaces('restaurant'),
-                            child: Text('Restaurants'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => _searchNearbyPlaces('lodging'),
-                            child: Text('Hotels'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => _searchNearbyPlaces('hospital'),
-                            child: Text('Hospitals'),
-                          ),
-                        ],
-                      ),
-                     GestureDetector(
-                    onVerticalDragUpdate: (details) {
-                      // Prevent vertical scroll events from reaching the SingleChildScrollView
-                    },
 
                     // Adjust the height as needed
-                   child: Container(
-                     height: 350,
-                     child: GoogleMap(
+                   Container(
+                     height: 300,
+                     child: MyHomePage(),
 
-                       onMapCreated: (controller) {
-                     setState(() {
-                     _mapController = controller;
-                     });
-                     },
-                       initialCameraPosition: CameraPosition(
-                         target: _currentLocation ?? LatLng(0, 0),
-                         zoom: 15,
-                       ),
-                       markers: _markers,
-                       cloudMapId: '34a385aaf8f3110e',
-
-                     ),
-                   ),
                   ),
 
-                    ],
-                  ),
-                ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
                   child: Column(
                     children: [
                       Row(
@@ -240,7 +199,7 @@ class _BookRideScreenState extends State<BookRideScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 75),
+                const SizedBox(height: 35),
                 Row(
                   children: [
                     const SizedBox(width: 70),
@@ -333,7 +292,7 @@ class _BookRideScreenState extends State<BookRideScreen> {
             ),
           ),
         ),
-      ),
+
 
     );
 

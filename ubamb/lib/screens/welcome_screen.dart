@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ubamb/screens/book_ride_screen.dart';
+import 'package:ubamb/screens/maps.dart';
+import 'package:ubamb/screens/maps2.dart';
 import 'package:ubamb/screens/signup_screen.dart';
 import 'package:url_launcher/url_launcher.dart'; 
 
@@ -239,6 +242,34 @@ class _UBAMBState extends State<UBAMB> {
                     textDirection: TextDirection.ltr,
                   ),
                   const SizedBox(height: 20),
+                  Container(
+                    width: 70,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => BookRideScreen()),
+                        );
+                      },
+                      child: const Center(
+                        child: Text(
+                          'CALL',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.none,
+                          ),
+                          textDirection: TextDirection.ltr,
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     width: 370,
                     height: 50,

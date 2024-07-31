@@ -5,6 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:ubamb/screens/account_screen.dart';
+import 'package:ubamb/screens/home_screen.dart';
+import 'package:ubamb/screens/maps3.dart';
+import 'package:ubamb/screens/starttrip_screen.dart';
 import 'map_provider.dart'; // Import the MapProvider
 
 class LocationDestinationScreen extends StatefulWidget {
@@ -15,12 +19,42 @@ class LocationDestinationScreen extends StatefulWidget {
 }
 
 class _LocationDestinationScreenState extends State<LocationDestinationScreen> {
-  final String googlePlacesApiKey = 'AIzaSyBtLcz3wFle9yVX1qIMYkslV9VYNxTog3E';
+  final String googlePlacesApiKey = 'AIzaSyBC-Vqf1uWwI6t57xo00OnzBf6LcqxsQ2E';
   final Completer<GoogleMapController> _controller = Completer();
   String _address = '';
   final String openCageApiKey = '0f7590f595cd460e8050da9a3eeddef7';
 
   Future<void> _getCurrentLocationAndAddress() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      setState(() {
+        _address = 'Error: Location services are disabled.';
+      });
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          _address = 'Error: Location permissions are denied';
+        });
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _address = 'Error: Location permissions are permanently denied, we cannot request permissions.';
+      });
+      return;
+    }
+
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
@@ -33,12 +67,6 @@ class _LocationDestinationScreenState extends State<LocationDestinationScreen> {
         setState(() {
           _address = address;
         });
-        Provider.of<MapProvider>(context, listen: false).setCurrentLocation(LatLng(position.latitude, position.longitude));
-        Provider.of<MapProvider>(context, listen: false).addMarker(Marker(
-          markerId: MarkerId('currentLocation'),
-          position: LatLng(position.latitude, position.longitude),
-          infoWindow: InfoWindow(title: 'Your Location', snippet: _address),
-        ));
       } else {
         setState(() {
           _address = 'Error: Failed to load address';
@@ -46,11 +74,10 @@ class _LocationDestinationScreenState extends State<LocationDestinationScreen> {
       }
     } catch (e) {
       setState(() {
-        _address = 'Error: $e';
+        _address = 'Error';
       });
     }
   }
-
   Future<void> _searchNearbyPlaces(String type) async {
     MapProvider mapProvider = Provider.of<MapProvider>(context, listen: false);
     if (mapProvider.currentLocation == null) return;
@@ -88,73 +115,181 @@ class _LocationDestinationScreenState extends State<LocationDestinationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MapProvider(),
-      child: Scaffold(
-        backgroundColor: const Color(0xFF4CA6F8),
-        body: RefreshIndicator(
-          onRefresh: _refreshScreen,
-          child: Padding(
-            padding: const EdgeInsets.all(0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: 55),
-                const SizedBox(height: 20),
-                Container(
-                  height: 600,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () => _searchNearbyPlaces('restaurant'),
-                            child: Text('Restaurants'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => _searchNearbyPlaces('lodging'),
-                            child: Text('Hotels'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => _searchNearbyPlaces('hospital'),
-                            child: Text('Hospitals'),
-                          ),
-                        ],
+    return Scaffold(
+      backgroundColor: const Color(0xFF4CA6F8),
+      body: RefreshIndicator(onRefresh: _refreshScreen, child: SingleChildScrollView(child: Padding(
+        padding: const EdgeInsets.all(0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const SizedBox(height: 55),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(padding: EdgeInsets.only(left: 0),
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back,
+                        color: Colors.black, size: 34),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const SizedBox(width: 30),
+                Column(
+                  children: [
+                    Container(
+                      width: 300,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                      SingleChildScrollView(child: GestureDetector(
-                        onVerticalDragUpdate: (details) {
-                          // Prevent vertical scroll events from reaching the SingleChildScrollView
-                        },
-                        child: Container(
-                          height: 550,
-                          child: Consumer<MapProvider>(
-                            builder: (context, mapProvider, child) {
-                              return GoogleMap(
-                                onMapCreated: (controller) {
-                                  mapProvider.setMapController(controller);
-                                },
-                                initialCameraPosition: CameraPosition(
-                                  target: mapProvider.currentLocation ?? LatLng(0, 0),
-                                  zoom: 15,
-                                ),
-                                markers: mapProvider.markers,
-                                mapType: MapType.normal,
-                              );
-                            },
+
+                      child:  Padding(
+
+                        padding: EdgeInsets.only(left: 10),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: _address,
+                              hintStyle: TextStyle(
+                                fontStyle: FontStyle.normal,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      width: 300,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                    ],
-                  ),
+                      child: const Padding(
+                        padding:EdgeInsets.only(left: 30),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Aga Khan Hospital',
+                              hintStyle: TextStyle(
+                                fontStyle: FontStyle.normal,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(width: 10),
+                Image.asset(
+                  'assets/images/img_3.png',
+                  width: 30,
+                  height: 30,
+                ),
               ],
             ),
-          ),
+            const SizedBox(height: 20),
+            Container(
+              height: 300,
+              child: MapsScreen(),
+            ),
+
+            const SizedBox(height: 50),
+            Row(
+              children: [
+                const SizedBox(width: 70),
+                GestureDetector(
+                  onTap: () {Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TripScreen()),
+                  );
+                  },
+                  child: Container(
+                    width: 250,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Done',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 50),
+            const Divider(
+              color: Colors.grey,
+              thickness: 2,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    IconButton(
+                      icon:  Icon(Icons.home, size: 31, color: Colors.black),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      },
+                    ),
+                    const Text('Home'),
+                  ],
+                ),
+                const Column(
+                  children: [
+                    Icon(Icons.history, size: 31),
+                    const SizedBox(height: 7),
+                    Text('History'),
+                  ],
+                ),
+                Column(
+                  children: [
+                    IconButton(
+                      icon:  const Icon(Icons.account_circle, size: 31, color: Colors.black),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AccountScreen()),
+                        );
+                      },
+                    ),
+                    Text('Account'),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
-      ),
+      ),))
+
     );
   }
 
