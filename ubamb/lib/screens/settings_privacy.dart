@@ -1,15 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-
-
 import 'package:ubamb/screens/account_screen.dart';
 import 'package:ubamb/screens/home_screen.dart';
 import 'package:ubamb/screens/ride_history.dart';
@@ -28,18 +24,83 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
 
   BehaviorSubject<String?> documentIdSubject = BehaviorSubject<String?>();
   Stream<String?> get documentIdStream => documentIdSubject.stream;
-
-
   Map<String, dynamic>? _userInfo;
   final UserService _userService = UserService(); // Instantiate UserService
+  final TextEditingController _dateController = TextEditingController();
+  final UserService1 _userService1 = UserService1();
+  final _fullNameController = TextEditingController();
+  TextEditingController _dueDateController = TextEditingController();
+  final _phoneCallNumberController = TextEditingController();
+  final _addressLocationController = TextEditingController();
+  final _preferredHospitalController = TextEditingController();
+  final _modeOfTransportController = TextEditingController();
+  final _trimesterController = TextEditingController();
+  final _gestationalController = TextEditingController();
+  final _pregnanciesController = TextEditingController();
+  final _deliveriesController = TextEditingController();
+  final _typeController = TextEditingController();
 
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _dateController.dispose();
+    _phoneCallNumberController.dispose();
+    _addressLocationController.dispose();
+    _preferredHospitalController.dispose();
+    _modeOfTransportController.dispose();
+    _dueDateController.dispose();
+    _trimesterController.dispose();
+    _gestationalController.dispose();
+    _pregnanciesController.dispose();
+    _deliveriesController.dispose();
+    _typeController.dispose();
+    super.dispose();
+  }
 
+  Future<void> _loadUserInfo() async {
+    Map<String, dynamic>? userInfo = await _userService1.fetchUserInfo();
+    if (userInfo != null) {
+      _fullNameController.text = userInfo['fullName'];
+      _dateController.text = userInfo['dateOfBirth'];
+      _phoneCallNumberController.text = userInfo['phoneCallNumber'];
+      _addressLocationController.text = userInfo['addressLocation'];
+      _preferredHospitalController.text = userInfo['preferredHospital'];
+      _modeOfTransportController.text = userInfo['modeOfTransport'];
+      _dueDateController.text = userInfo['dueDate'];
+      _trimesterController.text = userInfo['currentTrimester'];
+      _gestationalController.text = userInfo['gestationalAge'];
+      _pregnanciesController.text = userInfo['numberOfPregnancies'];
+      _deliveriesController.text = userInfo['numberOfDeliveries'];
+      _typeController.text = userInfo['typeOfPregnancy'];
 
+    }
+  }
+
+  Future<void> _saveSettings() async {
+    await _userService1.storeUserInfo(
+      _fullNameController.text,
+      _dateController.text,
+      _phoneCallNumberController.text,
+      _addressLocationController.text,
+      _preferredHospitalController.text,
+      _modeOfTransportController.text,
+        _dueDateController.text,
+        _trimesterController.text ,
+    _gestationalController.text ,
+    _pregnanciesController.text ,
+    _deliveriesController.text ,
+    _typeController.text ,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Settings saved successfully!')),
+    );
+  }
   @override
   void initState() {
     super.initState();
     _getCurrentLocationAndAddress();
     _fetchUserInfo();
+    _loadUserInfo();
   }
   Future<void> _fetchUserInfo() async {
     Map<String, dynamic>? userInfo = await _userService.fetchUserInfo();
@@ -47,11 +108,38 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
       _userInfo = userInfo;
     });
   }
+
+
+
   String _address = '';
   final String openCageApiKey = '0f7590f595cd460e8050da9a3eeddef7';
-
-
   Future<void> _getCurrentLocationAndAddress() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      setState(() {
+        _address = 'Error: Location services are disabled.';
+      });
+      return;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          _address = 'Error: Location permissions are denied';
+        });
+        return;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _address = 'Error: Location permissions are permanently denied, we cannot request permissions.';
+      });
+      return;
+    }
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
@@ -71,13 +159,13 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
       }
     } catch (e) {
       setState(() {
-        _address = 'Error: $e';
+        _address = 'Error';
       });
     }
   }
+
   File? _image;
   final ImagePicker _picker = ImagePicker();
-
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
@@ -99,30 +187,23 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
         print('User is not authenticated');
         return null;
       }
-
       String userId = user.uid;
       print('Authenticated user ID: $userId');
-
       // Upload the image to Firebase Storage
       firebase_storage.Reference storageReference = firebase_storage.FirebaseStorage.instance
           .ref()
           .child('images/${DateTime.now().millisecondsSinceEpoch}.jpg');
-
       firebase_storage.UploadTask uploadTask = storageReference.putFile(imageFile);
       await uploadTask;
-
       String downloadURL = await storageReference.getDownloadURL();
       print('Image uploaded to Firebase Storage with URL: $downloadURL');
-
       // Store the image metadata in Firestore
       DocumentReference docRef = await FirebaseFirestore.instance.collection('images').add({
         'url': downloadURL,
         'timestamp': FieldValue.serverTimestamp(), // Use server timestamp for consistency
         'userId': userId, // Ensure this field is included
       });
-
       print('Image metadata stored in Firestore with document ID: ${docRef.id}');
-
       // Return the document ID of the newly uploaded image
       return docRef.id;
     } on FirebaseException catch (e) {
@@ -133,11 +214,37 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
       return null;
     }
   }
-  String? documentId;
 
+  String? documentId;
   Future<void> uploadAndDisplayImage(File imageFile) async {
     documentId = await _uploadImage(imageFile);
     // No need to add to a stream, just update the UI
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null)
+      setState(() {
+        _dateController.text = "${picked.toLocal()}".split(' ')[0];
+
+      });
+  }
+  Future<void> _selectDueDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null)
+      setState(() {
+        _dueDateController.text =  "${picked.toLocal()}".split(' ')[0];
+      });
   }
 
   Future<String?> fetchDocumentId() async {
@@ -324,51 +431,63 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
                             color: Colors.white,
 
                           ),
-                          child: const Padding(
+                          child:  Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: TextField(
+                              child: TextFormField(
+                                controller: _fullNameController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Ella James',
+                                  hintText: _userInfo != null
+                                      ? '${_userInfo!['firstName']} ${_userInfo!['secondName']}'
+                                      : '',
                                   hintStyle: TextStyle(
-                                    fontStyle: FontStyle.normal,
+                                    fontSize: 16,
                                     color: Colors.black,
                                   ),
                                 ),
+                                // Makes the field non-editable
                               ),
+
                             ),
                           ),
                         ),
                         const SizedBox(height: 10),
                         const Text("Date of birth:", style: TextStyle(color: Colors.black, fontSize: 20)),
                         const SizedBox(height: 2),
-                        Container(
-                          width: 307,
-                          height: 40,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
+                      Container(
+                        width: 307,
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextField(
 
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '01/01/1999',
-                                  hintStyle: TextStyle(
-                                    fontStyle: FontStyle.normal,
-                                    color: Colors.black,
-                                  ),
+                              controller: _dateController,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '2024-07-04',
+                                hintStyle: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  color: Colors.black,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.calendar_today),
+                                  onPressed: () => _selectDate(context),
                                 ),
                               ),
+                              readOnly: true, // Prevents the user from editing the text directly
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
+                      ),
+
+                      const SizedBox(height: 10),
                         const Text("Contact:", style: TextStyle(color: Colors.black, fontSize: 20)),
                         const SizedBox(height: 2),
                         Container(
@@ -378,14 +497,15 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
                             color: Colors.white,
 
                           ),
-                          child: const Padding(
+                          child:  Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: TextField(
+                                controller: _phoneCallNumberController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: '25479378950',
+                                  hintText:_userInfo != null ? _userInfo!['phoneNumber'] : '',
                                   hintStyle: TextStyle(
                                     fontStyle: FontStyle.normal,
                                     color: Colors.black,
@@ -405,19 +525,21 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
                             color: Colors.white,
 
                           ),
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: TextField(
+                                controller: _addressLocationController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: ' 456 Ngong Road, Nairobi, Kenya',
+                                  hintText: _address,
                                   hintStyle: TextStyle(
                                     fontStyle: FontStyle.normal,
                                     color: Colors.black,
                                   ),
                                 ),
+
                               ),
                             ),
                           ),
@@ -441,14 +563,16 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
                             color: Colors.white,
 
                           ),
-                          child: const Padding(
+                          child:  Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: TextField(
+                                controller: _preferredHospitalController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: 'Aga Khan Hospital',
+
                                   hintStyle: TextStyle(
                                     fontStyle: FontStyle.normal,
                                     color: Colors.black,
@@ -468,11 +592,12 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
                             color: Colors.white,
 
                           ),
-                          child: const Padding(
+                          child:  Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: TextField(
+                                controller: _modeOfTransportController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: 'Ambulance',
@@ -486,7 +611,7 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Text("Special Transportation Needs:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const Text("Expected Due Date:", style: TextStyle(color: Colors.black, fontSize: 20)),
                         const SizedBox(height: 2),
                         Container(
                           width: 307,
@@ -495,14 +620,132 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
                             color: Colors.white,
 
                           ),
-                          child: const Padding(
+                          child:  Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: TextField(
+                                controller: _dueDateController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Ambulance',
+                                  hintText: '2024-07-04',
+
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(Icons.calendar_today),
+                                    onPressed: () => _selectDueDate(context),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),const SizedBox(height: 10),
+                        const Text("Current Trimester:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+
+                          ),
+                          child:  Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                controller: _trimesterController,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Second Trimester',
+
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),const SizedBox(height: 10),
+                        const Text("Gestational Age:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+
+                          ),
+                          child:  Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                controller: _gestationalController,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: '25 Weeks',
+
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),const SizedBox(height: 10),
+                        const Text("Number of Pregnancies(Gravida):", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+
+                          ),
+                          child:  Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                controller: _pregnanciesController,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: '2',
+
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ), const SizedBox(height: 10),
+                        const Text("Number of Deliveries(Para):", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+
+                          ),
+                          child:  Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                controller: _deliveriesController,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: '1',
+
                                   hintStyle: TextStyle(
                                     fontStyle: FontStyle.normal,
                                     color: Colors.black,
@@ -512,9 +755,55 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 10),
+                        const Text("Type of Pregnancy:", style: TextStyle(color: Colors.black, fontSize: 20)),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 307,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+
+                          ),
+                          child:  Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                controller: _typeController,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Single',
+
+                                  hintStyle: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
                       ],
                     ),
                   ),
+                  Padding(padding: EdgeInsets.only(left: 100,top: 40 ),
+                  child:ElevatedButton(
+                    onPressed: () async {
+                      await _saveSettings(); // Save the information to Firestore
+                      Navigator.pop(context); // Navigate back to the previous screen (AccountScreen)
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue, // Set the background color to blue
+                      foregroundColor: Colors.white, // Set the text color to white
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15), // Customize padding
+                      textStyle: TextStyle(fontSize: 18), // Customize text style
+                    ),
+                    child: Text('Save'),
+                  ),
+
+                  )
                 ],
 
               ),
@@ -709,4 +998,45 @@ class _ImageDisplayWidgetState extends State<ImageDisplayWidget> {
       },
     );
   }
+}
+
+
+class UserService1 {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> storeUserInfo(String fullName, String dateOfBirth, String phoneCallNumber, String addressLocation, String preferredHospital, String modeOfTransport, String dueDate, String currentTrimester, String gestationalAge,String numberOfPregnancies, String numberOfDeliveries, String typeOfPregnancy) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('usersSettings').doc(user.uid).set({
+        'fullName': fullName,
+        'dateOfBirth': dateOfBirth,
+        'phoneCallNumber': phoneCallNumber,
+        'addressLocation': addressLocation,
+        'prefferedHospital': preferredHospital,
+        'modeOfTransport': modeOfTransport,
+        'dueDate': dueDate,
+        'currentTrimester': currentTrimester,
+        'gestationalAge': gestationalAge,
+        'numberOfPregnancies':numberOfPregnancies,
+        'numberOfDeliveries': numberOfDeliveries,
+        'typeOfPregnancy': typeOfPregnancy
+
+
+        // Add other fields as needed
+      });
+    }
+  }
+
+  Future<Map<String, dynamic>?> fetchUserInfo() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot documentSnapshot = await _firestore.collection('usersSettings').doc(user.uid).get();
+      if (documentSnapshot.exists) {
+        return documentSnapshot.data() as Map<String, dynamic>;
+      }
+    }
+    return null;
+  }
+
 }

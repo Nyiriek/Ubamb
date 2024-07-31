@@ -5,7 +5,7 @@ class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> storeUserInfo(String firstName, String secondName, String phoneNumber) async {
+  Future<void> storeUserInfo(String firstName, String secondName, String phoneNumber,) async {
     User? user = _auth.currentUser;
     if (user != null) {
       await _firestore.collection('users').doc(user.uid).set({

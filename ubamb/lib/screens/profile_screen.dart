@@ -12,6 +12,7 @@ import 'package:geolocator/geolocator.dart';
 
 
 
+
 class  ProfileScreen extends StatefulWidget {
   const  ProfileScreen({super.key});
 
@@ -52,7 +53,9 @@ class _ProfileScreenState extends State< ProfileScreen> {
     }
   }
   Map<String, dynamic>? _userInfo;
+  Map<String, dynamic>? _userInfo1;
   final UserService _userService = UserService(); // Instantiate UserService
+  final UserService1 _userService1 = UserService1();
   @override
   void initState() {
     super.initState();
@@ -61,8 +64,10 @@ class _ProfileScreenState extends State< ProfileScreen> {
   }
   Future<void> _fetchUserInfo() async {
     Map<String, dynamic>? userInfo = await _userService.fetchUserInfo();
+    Map<String, dynamic>? userInfo1 = await _userService1.fetchUserInfo();
     setState(() {
       _userInfo = userInfo;
+      _userInfo1 = userInfo1;
     });
   }
   String _address = '';
@@ -190,7 +195,7 @@ class _ProfileScreenState extends State< ProfileScreen> {
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),)
-                            : SmallLoadingIndicator(),
+                            :
 
                         const SizedBox(height: 4.0),
                         Container(
@@ -205,7 +210,7 @@ class _ProfileScreenState extends State< ProfileScreen> {
                             color: Colors.grey,
                             fontSize: 14,
                           ),)
-                              : SmallLoadingIndicator(),
+                              :CircularProgressIndicator()
 
 
 
@@ -249,14 +254,23 @@ class _ProfileScreenState extends State< ProfileScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(height: 8.0),
                             _userInfo != null
                                 ? Text('Full Name:  ${_userInfo!['firstName']} ${_userInfo!['secondName']}')
-                                : SmallLoadingIndicator(),
+                                :
                             SizedBox(height: 8.0),
 
-                            Text("Address:    ${_address}"),
-                            Text('Date of birth: 01/01/1999'),
-                            SizedBox(height: 0),
+                            _userInfo1 != null
+                                ? Text('Address:  ${_userInfo1!['addressLocation']} ')
+                                : SmallLoadingIndicator(),
+
+                            SizedBox(height: 8.0),
+                            _userInfo1 != null
+                                ? Text('Date of birth:  ${_userInfo1!['dateOfBirth']} ')
+                                : SmallLoadingIndicator(),
+
+
+                            SizedBox(height: 8),
                             _userInfo != null
                                 ? Text('Contact:  ${_userInfo!['phoneNumber']} ')
                                 : SmallLoadingIndicator(),
@@ -279,13 +293,30 @@ class _ProfileScreenState extends State< ProfileScreen> {
                         color: Colors.white,
                       ),
                     ),
+
+
                     SizedBox(height: 8.0),
-                    Text('- Expected Due Date: September 10, 2024'),
-                    Text('- Current Trimester: Second Trimester'),
-                    Text('- Gestational Age: 25 weeks'),
-                    Text('- Number of Pregnancies (Gravida): 2'),
-                    Text('- Number of Deliveries (Para): 1'),
-                    Text('- Type of Pregnancy: Single'),
+                    _userInfo1 != null
+                        ? Text('- Expected Due Date:  ${_userInfo1!['dueDate']} ')
+                        : SmallLoadingIndicator(),
+
+                    SizedBox(height: 8.0),
+                    _userInfo1 != null
+                        ? Text('- Current Trimester:  ${_userInfo1!['currentTrimester']} ')
+                        : SmallLoadingIndicator(),
+
+                    SizedBox(height: 8.0),
+                    _userInfo1 != null
+                        ? Text('- Gestational Age:  ${_userInfo1!['gestationalAge']} ')
+                        : SmallLoadingIndicator(),
+                    SizedBox(height: 8.0),
+                    _userInfo1 != null
+                        ? Text('- Number of Deliveries (Para):  ${_userInfo1!['numberOfDeliveries']} ')
+                        : SmallLoadingIndicator(),
+                    SizedBox(height: 8.0),
+                    _userInfo1 != null
+                        ? Text('- Type of Pregnancy:  ${_userInfo1!['typeOfPregnancy']} ')
+                        : SmallLoadingIndicator(),
                     SizedBox(height: 16.0),
                     Divider(
                       color: Colors.white,
@@ -299,10 +330,17 @@ class _ProfileScreenState extends State< ProfileScreen> {
                       ),
                     ),
                     SizedBox(height: 8.0),
-                    Text(
-                        'Preferred Hospital or Birthing Center: Aga Khan Hospital'),
-                    Text('Preferred Mode of Transport: Ambulance'),
-                    Text('Special Transportation Needs: Ambulance'),
+                    SizedBox(height: 8.0),
+                    _userInfo1 != null
+                        ? Text('Preferred Hospital or Birthing Center:  ${_userInfo1!['prefferedHospital']} ')
+                        : SmallLoadingIndicator(),
+                    SizedBox(height: 8.0),
+                    _userInfo1 != null
+                        ? Text('Preferred Mode of Transport:  ${_userInfo1!['modeOfTransport']} ')
+                        : SmallLoadingIndicator(),
+
+
+
                   ],
                 ),
               ),

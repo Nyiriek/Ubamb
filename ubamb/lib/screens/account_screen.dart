@@ -211,7 +211,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   GestureDetector(
                     onTap: () {Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                      MaterialPageRoute(builder: (context) =>  ProfileScreen()),
                     );
                     },
                     child:  buildMenuItem(
