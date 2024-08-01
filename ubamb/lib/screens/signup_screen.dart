@@ -31,7 +31,7 @@ class SignUpScreen extends StatelessWidget {
         if (userCredential.user != null) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => SignUpScreen()),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
           );
         }
       } catch (e) {
