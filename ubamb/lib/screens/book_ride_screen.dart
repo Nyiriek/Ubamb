@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ubamb/screens/maps.dart';
 import 'package:ubamb/screens/pickup_location.dart';
+import 'package:ubamb/screens/ride_history.dart';
 import 'home_screen.dart';
 import 'account_screen.dart';
 import 'dart:convert';
@@ -92,10 +93,85 @@ class _BookRideScreenState extends State<BookRideScreen> {
   }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: const Color(0xFF4CA6F8),
-      body: RefreshIndicator(
-        onRefresh: _refreshScreen,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF4CA6F8),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black, size: 34),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF4CA6F8),
+        items: [
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  HomeScreen()),
+                    );
+                  },
+                  tooltip: 'Home',
+                ),
+                Text('Home'),
+              ],
+            ),
+
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.history, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  RideHistoryScreen()),
+                    );
+                  },
+
+                ),
+                Text('History'),
+              ],
+            ),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.account_circle, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  AccountScreen()),
+                    );
+                  },
+
+                ),
+                Text('Account'),
+              ],
+            ),
+            label: '',
+          ),
+        ],
+
+      ),
+      body: SingleChildScrollView(
+        child: RefreshIndicator(
+          onRefresh: _refreshScreen,
 
           child: Padding(
             padding: const EdgeInsets.all(0),
@@ -103,28 +179,14 @@ class _BookRideScreenState extends State<BookRideScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(height: 55),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0),
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back,
-                            color: Colors.black, size: 34),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                  ],
+
+
+                // Adjust the height as needed
+                Container(
+                  height: 300,
+                  child: MyHomePage(),
+
                 ),
-
-                    // Adjust the height as needed
-                   Container(
-                     height: 300,
-                     child: MyHomePage(),
-
-                  ),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6.0),
@@ -248,50 +310,12 @@ class _BookRideScreenState extends State<BookRideScreen> {
                   color: Colors.grey,
                   thickness: 2,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.home, size: 31, color: Colors.black),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) =>  HomeScreen()),
-                            );
-                          },
-                        ),
-                        const Text('Home'),
-                      ],
-                    ),
-                    const Column(
-                      children: [
-                        Icon(Icons.history, size: 31),
-                        SizedBox(height: 7),
-                        Text('History'),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.account_circle, size: 31, color: Colors.black),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) =>  AccountScreen()),
-                            );
-                          },
-                        ),
-                        const Text('Account'),
-                      ],
-                    ),
-                  ],
-                ),
+
               ],
             ),
           ),
         ),
+      )
 
 
     );

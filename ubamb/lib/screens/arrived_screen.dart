@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:ubamb/screens/account_screen.dart';
+import 'package:ubamb/screens/home_screen.dart';
 import 'package:ubamb/screens/maps5.dart';
 import 'package:ubamb/screens/payment_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:ubamb/screens/ride_history.dart';
 
 class ArrivedScreen extends StatefulWidget {
   const ArrivedScreen({super.key});
@@ -79,16 +82,79 @@ class _ArrivedScreenState extends State<ArrivedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF4CA6F8),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading:  IconButton(
-          icon: const Icon(Icons.arrow_back,
-              color: Colors.black, size: 34),
+        backgroundColor: const Color(0xFF4CA6F8),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 34),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF4CA6F8),
+        items: [
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  HomeScreen()),
+                    );
+                  },
+                  tooltip: 'Home',
+                ),
+                Text('Home'),
+              ],
+            ),
+
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.history, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  RideHistoryScreen()),
+                    );
+                  },
+
+                ),
+                Text('History'),
+              ],
+            ),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.account_circle, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  AccountScreen()),
+                    );
+                  },
+
+                ),
+                Text('Account'),
+              ],
+            ),
+            label: '',
+          ),
+        ],
+
       ),
       body: Column(
         children: [

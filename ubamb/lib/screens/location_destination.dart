@@ -9,6 +9,7 @@ import 'package:ubamb/screens/account_screen.dart';
 import 'package:ubamb/screens/home_screen.dart';
 import 'package:ubamb/screens/maps2.dart';
 import 'package:ubamb/screens/maps3.dart';
+import 'package:ubamb/screens/ride_history.dart';
 import 'package:ubamb/screens/starttrip_screen.dart';
 import 'map_provider.dart'; // Import the MapProvider
 
@@ -118,26 +119,85 @@ class _LocationDestinationScreenState extends State<LocationDestinationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF4CA6F8),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF4CA6F8),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black, size: 34),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Color(0xFF4CA6F8),
+          items: [
+            BottomNavigationBarItem(
+              icon: Column(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.home, size: 31, color: Colors.black),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>  HomeScreen()),
+                      );
+                    },
+                    tooltip: 'Home',
+                  ),
+                  Text('Home'),
+                ],
+              ),
+
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Column(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.history, size: 31, color: Colors.black),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>  RideHistoryScreen()),
+                      );
+                    },
+
+                  ),
+                  Text('History'),
+                ],
+              ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Column(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.account_circle, size: 31, color: Colors.black),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>  AccountScreen()),
+                      );
+                    },
+
+                  ),
+                  Text('Account'),
+                ],
+              ),
+              label: '',
+            ),
+          ],
+
+        ),
       body: RefreshIndicator(onRefresh: _refreshScreen, child: SingleChildScrollView(child: Padding(
         padding: const EdgeInsets.all(0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 55),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(padding: EdgeInsets.only(left: 0),
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back,
-                        color: Colors.black, size: 34),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-              ],
-            ),
+
             Row(
               children: [
                 const SizedBox(width: 30),
@@ -206,7 +266,7 @@ class _LocationDestinationScreenState extends State<LocationDestinationScreen> {
             ),
             const SizedBox(height: 20),
             Container(
-              height: 300,
+              height: 350,
               child: MpasScreen1(),
             ),
 
@@ -247,46 +307,7 @@ class _LocationDestinationScreenState extends State<LocationDestinationScreen> {
               color: Colors.grey,
               thickness: 2,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    IconButton(
-                      icon:  Icon(Icons.home, size: 31, color: Colors.black),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
-                      },
-                    ),
-                    const Text('Home'),
-                  ],
-                ),
-                const Column(
-                  children: [
-                    Icon(Icons.history, size: 31),
-                    const SizedBox(height: 7),
-                    Text('History'),
-                  ],
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      icon:  const Icon(Icons.account_circle, size: 31, color: Colors.black),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AccountScreen()),
-                        );
-                      },
-                    ),
-                    Text('Account'),
-                  ],
-                ),
-              ],
-            ),
+
           ],
         ),
       ),))

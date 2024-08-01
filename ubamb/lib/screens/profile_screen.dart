@@ -150,6 +150,70 @@ class _ProfileScreenState extends State< ProfileScreen> {
 
 
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF4CA6F8),
+        items: [
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  HomeScreen()),
+                    );
+                  },
+                  tooltip: 'Home',
+                ),
+                Text('Home'),
+              ],
+            ),
+
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.history, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  RideHistoryScreen()),
+                    );
+                  },
+
+                ),
+                Text('History'),
+              ],
+            ),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.account_circle, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  AccountScreen()),
+                    );
+                  },
+
+                ),
+                Text('Account'),
+              ],
+            ),
+            label: '',
+          ),
+        ],
+
+      ),
       body: RefreshIndicator(
         onRefresh: _refreshScreen,
         child: SingleChildScrollView(
@@ -349,59 +413,7 @@ class _ProfileScreenState extends State< ProfileScreen> {
                 color: Colors.grey,
                 thickness: 2,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    children: [
-                      IconButton(
-                        icon:
-                        const Icon(Icons.home, size: 31, color: Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>  HomeScreen()),
-                          );
-                        },
-                      ),
-                      const Text('Home'),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.history,
-                            size: 31, color: Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const RideHistoryScreen()),
-                          );
-                        },
-                      ),
-                      const Text('History'),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.account_circle,
-                            size: 31, color: Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>  AccountScreen()),
-                          );
-                        },
-                      ),
-                      const Text('Account'),
-                    ],
-                  ),
-                ],
-              ),
+
             ],
           ),
         ),

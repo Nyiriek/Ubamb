@@ -75,6 +75,79 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF4CA6F8),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF4CA6F8),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 34),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF4CA6F8),
+        items: [
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  HomeScreen()),
+                    );
+                  },
+                  tooltip: 'Home',
+                ),
+                Text('Home'),
+              ],
+            ),
+
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.history, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  RideHistoryScreen()),
+                    );
+                  },
+
+                ),
+                Text('History'),
+              ],
+            ),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.account_circle, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  AccountScreen()),
+                    );
+                  },
+
+                ),
+                Text('Account'),
+              ],
+            ),
+            label: '',
+          ),
+        ],
+
+      ),
       body: RefreshIndicator(onRefresh: _refreshScreen,
       child:  SingleChildScrollView(
         child: Padding(
@@ -83,21 +156,8 @@ class _AccountScreenState extends State<AccountScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back,
-                        color: Colors.black, size: 24),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  const Icon(Icons.menu, color: Colors.black, size: 23),
-                ],
-              ),
-              const SizedBox(height: 20),
+
+
               Row(
                 children: [FutureBuilder<String?>(
                   future: fetchDocumentId(),
@@ -286,45 +346,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 thickness: 1,
               ),
               const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.home, size: 31, color: Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>  HomeScreen()),
-                          );
-                        },
-                      ),
-                      const Text('Home'),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.history, size: 31, color:Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const  RideHistoryScreen()),
-                          );
-                        },
-                      ),
-                      const Text('History'),
-                    ],
-                  ),
-                  const  Column(
-                    children: [
-                      Icon(Icons.account_circle, size: 31),
-                      Text('Account'),
-                    ],
-                  ),
-                ],
-              ),
+
             ],
           ),
         ),

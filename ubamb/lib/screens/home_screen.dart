@@ -101,7 +101,95 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: const Color(0xFF4CA6F8),
+      backgroundColor: Color(0xFF4CA6F8),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF4CA6F8),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 34),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title:  _userInfo != null
+            ? Text('Welcome, ${_userInfo!['firstName']}!', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),)
+            : SmallLoadingIndicator(),
+
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AccountScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF4CA6F8),
+        items: [
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  HomeScreen()),
+                    );
+                  },
+                  tooltip: 'Home',
+                ),
+                Text('Home'),
+              ],
+            ),
+
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.history, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  RideHistoryScreen()),
+                    );
+                  },
+
+                ),
+                Text('History'),
+              ],
+            ),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.account_circle, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  AccountScreen()),
+                    );
+                  },
+
+                ),
+                Text('Account'),
+              ],
+            ),
+            label: '',
+          ),
+        ],
+
+      ),
       body: SingleChildScrollView(
 
        child: Padding(padding: EdgeInsets.only(left: 20, right: 20),
@@ -109,42 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
          crossAxisAlignment: CrossAxisAlignment.start,
          children: <Widget>[
            const SizedBox(height: 25),
-           Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-             children: [
-               IconButton(
-                 icon: const Icon(Icons.menu, color: Colors.black),
-                 onPressed: () {
-                   // Implement navigation drawer functionality here
-                 },
-               ),
-               const SizedBox(width: 15),
-               Container(
-                 width: 200,
-                 height: 30,
-                 child: _userInfo != null
-                     ? Text('Welcome, ${_userInfo!['firstName']}!', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),)
-                     : SmallLoadingIndicator(),
-               ),
-               IconButton(
-                 icon: const Icon(Icons.person, color: Colors.black),
-                 onPressed: () {
-                   Navigator.push(
-                     context,
-                     MaterialPageRoute(builder: (context) => AccountScreen()),
-                   );
-                 },
-               ),
-             ],
-           ),
-           const SizedBox(height: 15),
 
-           Text("Your current location", style: TextStyle(
-             fontFamily: 'Roboto',
-             fontSize: 16,
-             color: Color.fromARGB(255, 92, 92, 92),
-           ),),
-           const SizedBox(height: 10),
            Row(
              children: [
                Icon(Icons.location_on, color: Colors.blue),
@@ -211,79 +264,9 @@ class _HomeScreenState extends State<HomeScreen> {
              ),
            ),
 
-           const SizedBox(height: 60),
+           const SizedBox(height: 140),
            const Divider(color: Colors.black, thickness: 1),
-           const SizedBox(height: 2),
-           Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-             children: [
-               Column(
-                 children: [
-                   IconButton(
-                     icon: const Icon(Icons.home, size: 31, color: Colors.black),
-                     onPressed: () {
-                       // Implement home functionality here
-                     },
-                   ),
-                   const SizedBox(height: 5),
-                   const Text(
-                     'Home',
-                     style: TextStyle(
-                       fontFamily: 'Roboto',
-                       fontSize: 14,
-                       color: Colors.black,
-                     ),
-                   ),
-                 ],
-               ),
-               Column(
-                 children: [
-                   IconButton(
-                     icon: const Icon(Icons.history, size: 31, color: Colors.black),
-                     onPressed: () {
-                       Navigator.push(
-                         context,
-                         MaterialPageRoute(builder: (context) => const RideHistoryScreen()),
-                       );
-                       // Implement history functionality here
-                     },
-                   ),
-                   const SizedBox(height: 5),
-                   const Text(
-                     'History',
-                     style: TextStyle(
-                       fontFamily: 'Roboto',
-                       fontSize: 14,
-                       color: Colors.black,
-                     ),
-                   ),
-                 ],
-               ),
-               Column(
-                 children: [
-                   IconButton(
-                     icon: const Icon(Icons.person, size: 31, color: Colors.black),
-                     onPressed: () {
-                       Navigator.push(
-                         context,
-                         MaterialPageRoute(builder: (context) =>  AccountScreen()),
-                       );
-                     },
-                   ),
-                   const SizedBox(height: 5),
-                   const Text(
-                     'Account',
-                     style: TextStyle(
-                       fontFamily: 'Roboto',
-                       fontSize: 14,
-                       color: Colors.black,
-                     ),
-                   ),
-                 ],
-               ),
-             ],
-           ),
-           const SizedBox(height: 3),
+
          ],
        ),
        )

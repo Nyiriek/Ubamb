@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MpasScreen1> {
                 ElevatedButton(onPressed:  () => _fetchNearbyPlaces('government_office'),  child: Icon(Icons.account_balance))
               ]
           ),
-          Container(height: 250, child: GoogleMap(
+          Container(height: 300, child: GoogleMap(
             initialCameraPosition: CameraPosition(
               target: LatLng(currentLocatioN!.latitude!, currentLocatioN!.longitude!),
               zoom: 15,

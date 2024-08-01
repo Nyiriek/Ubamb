@@ -290,7 +290,89 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: const Color(0xFF4CA6F8),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF4CA6F8),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 34),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          'Settings and Privacy',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+       backgroundColor: Color(0xFF4CA6F8),
+        items: [
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home, size: 31, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  HomeScreen()),
+                            );
+                  },
+                  tooltip: 'Home',
+                ),
+                Text('Home'),
+              ],
+            ),
+
+            label: '',
+          ),
+          BottomNavigationBarItem(
+                icon: Column(
+                children: [
+                IconButton(
+                icon: Icon(Icons.history, size: 31, color: Colors.black),
+                onPressed: () {
+                  Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  RideHistoryScreen()),
+                            );
+                },
+
+                ),
+                Text('History'),
+                ],
+                ),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.account_circle, size: 31, color: Colors.black),
+                  onPressed: () {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) =>  AccountScreen()),
+                      );
+                    },
+
+                ),
+                Text('Account'),
+              ],
+            ),
+            label: '',
+          ),
+        ],
+
+      ),
       body: RefreshIndicator(
         onRefresh: _refreshScreen,
         child: SingleChildScrollView(
@@ -300,22 +382,8 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const SizedBox(height: 25),
-              Row(
 
-                children: [
-                  IconButton(
-                    icon:  const Icon(Icons.arrow_back,
-                        color: Colors.black, size: 35),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const Padding(padding: EdgeInsets.only(left: 30),
-                    child: Text('Settings and Privacy', style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold)),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
+
             Padding(
               padding: const EdgeInsets.only(left: 40),
               child: Row(
@@ -815,54 +883,7 @@ class _SettingsPrivacyScreenState extends State<SettingsPrivacyScreen> {
                 thickness: 2,
               ),
               const SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.home, size: 31, color: Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>  HomeScreen()),
-                          );
-                        },
-                      ),
-                      const Text('Home'),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.history, size: 31, color:Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const  RideHistoryScreen()),
-                          );
-                        },
-                      ),
-                      const Text('History'),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                        icon:  const Icon(Icons.account_circle, size: 31, color: Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>   AccountScreen()),
-                          );
-                        },
-                      ),
 
-                      const Text('Account'),
-                    ],
-                  ),
-                ],
-              ),
 
             ],
           ),

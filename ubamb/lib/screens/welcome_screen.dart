@@ -73,10 +73,10 @@ class _UBAMBState extends State<UBAMB> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 5),
                   Container(
                     width: 390,
-                    height: 400,
+                    height: 350,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: const AssetImage('assets/images/amb.png'),

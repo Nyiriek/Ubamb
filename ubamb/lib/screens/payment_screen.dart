@@ -10,26 +10,22 @@ class PaymentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF4CA6F8),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF4CA6F8),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 34),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back,
-                        color: Colors.black, size: 24),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-
-                ],
-              ),
+              
               const SizedBox(height: 10, width: 30),
              const Padding(padding: EdgeInsets.only(left: 30),
              child:  Text(

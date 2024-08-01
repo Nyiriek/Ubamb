@@ -9,7 +9,7 @@ import 'userinfo.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
-
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -42,37 +42,55 @@ class SignUpScreen extends StatelessWidget {
     }
   }
 
-Future<void> _signInWithGoogle(BuildContext context) async {
-  try {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-    if (googleUser != null) {
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      UserCredential userCredential = await _auth.signInWithCredential(credential);
-
-      if (userCredential.user != null) {
-        // User is successfully signed in, navigate to the home screen
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+  Future<void> _signInWithGoogle(BuildContext context) async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser != null) {
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
         );
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+        if (userCredential.user != null) {
+          // User is successfully signed in, fetch and display user info
+          final User user = userCredential.user!;
+          final List<String> nameParts = (user.displayName ?? '').split(' ');
+          _firstNameController.text = nameParts.isEmpty ? '' : nameParts[0];
+          _lastNameController.text = nameParts.length > 1 ? nameParts[1] : '';
+          _emailController.text = user.email ?? '';
+
+          // Navigate to the home screen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => SignUpScreen()),
+          );
+        }
       }
-    }
-  } catch (e) {
-    if (kDebugMode) {
-      print(e);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      // Handle sign-in error
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Sign-in Error'),
+            content: Text('An error occurred during sign-in: $e'),
+            actions: [
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
-}
-
-
   Future<void> _showPasswordDialog(BuildContext context, String email) async {
     TextEditingController passwordController = TextEditingController();
     return showDialog<void>(
@@ -142,6 +160,18 @@ Future<void> _signInWithGoogle(BuildContext context) async {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF4CA6F8),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF4CA6F8),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 34),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+
+
+      ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(25.0),
@@ -151,15 +181,7 @@ Future<void> _signInWithGoogle(BuildContext context) async {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const SizedBox(height: 25),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.black),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
+
                 const SizedBox(height: 35),
                 Container(
                   width: 150,
@@ -493,7 +515,7 @@ Future<void> _signInWithGoogle(BuildContext context) async {
                           ),
                         ),
                         const Text(
-                          'Sign in with Google',
+                          'Sign up with Google',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
