@@ -17,8 +17,15 @@ BELOW IS A LINK TO A RECORDED DEMO OF HOW THE APP WORKS
 
 
 
+FRONT-END DEMO
 
 
 YOUTUBE VIDEO:     https://www.youtube.com/watch?v=yhYG-ZjCOkM
 ![Screenshot (11)](https://github.com/Nyiriek/_Ubamb_/assets/116681226/4da77f16-1d27-43e2-869d-5e09610e9402)
 }
+
+
+BACK-END DEMO
+Fully Functioning Ubamb App Demo
+
+    https://www.youtube.com/watch?v=UIUENaigHlk
