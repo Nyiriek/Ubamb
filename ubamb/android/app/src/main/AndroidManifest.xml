@@ -8,6 +8,7 @@
 
 
     <application
+
         android:label="ubamb"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
