@@ -1,5 +1,5 @@
 
-    # Ubamb App
+ # Ubamb App
     
 ## Hi there, welcome to Ubamb.
 The name Ubamb has been coined from Uber and Ambulance. We chose this name because the app will serve two purposes simultaneously—one for transportation and two as an ambulance.
@@ -53,3 +53,12 @@ https://youtu.be/3jcZLwoO-AA
 
 
      https://youtu.be/3jcZLwoO-AA
+
+
+Finally, here is the link to Authentication, App/Business Logic, and Backend assignment. You will find more about Widget testing, APK, Business Model etc...
+
+
+https://docs.google.com/document/d/1FdbgaJScSqpIR6zPstLbTzyzoX0HUti_ximel-E5XGQ/edit?usp=sharing
+
+
+    https://docs.google.com/document/d/1FdbgaJScSqpIR6zPstLbTzyzoX0HUti_ximel-E5XGQ/edit?usp=sharing
